@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PSP-assignment.cpp">
+    <ClCompile Include="admin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
