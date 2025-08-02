@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Downloads\PSP Assignment\PSP Assignment\PSP Assignment\customerpage.cpp" />
     <ClCompile Include="admin.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="header.cpp" />
+    <ClCompile Include="menu.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
