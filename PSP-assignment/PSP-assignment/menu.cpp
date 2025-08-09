@@ -4,15 +4,14 @@
 using namespace std;
 
 int main() {
+    InitSchedules(); // Initialize schedule to all FREE
     int role;
 
-    cout << "===== NAIL CARE & ART BOOKING SYSTEM =====\n" << endl;
+    cout << "\n===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n";
     cout << "What is your role?\n"
         << "1. Admin\n"
         << "2. Expert\n"
-        << "3. Customer\n" << endl;
-
-    cout << "Role: ";
+        << "3. Customer\n";
     cin >> role;
 
     if (role == 1) {
@@ -31,18 +30,17 @@ int main() {
         case 3: Customer_list(); break;
         case 4: Generate_sales_rpt(); break;
         case 5: Expert_bonus(); break;
-        default: cout << "Invalid choice"; break;
+        default: cout << "Invalid choice.\n"; break;
         }
     }
     else if (role == 2) {
-        cout << "Expert features coming soon...";
+        Expert();
     }
     else if (role == 3) {
-        cin.ignore();
         customer();
     }
     else {
-        cout << "Invalid Role Number!" << endl;
+        cout << "Invalid Role Number!\n";
     }
 
     return 0;

@@ -24,7 +24,10 @@
     <ClCompile Include="header.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\Downloads\PSP Assignment\PSP Assignment\PSP Assignment\customerpage.cpp">
+    <ClCompile Include="expert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="customer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
