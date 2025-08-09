@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\Downloads\PSP Assignment\PSP Assignment\PSP Assignment\customerpage.cpp" />
     <ClCompile Include="admin.cpp" />
-    <ClCompile Include="header.cpp" />
+    <ClCompile Include="header.h" />
     <ClCompile Include="menu.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
