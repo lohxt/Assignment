@@ -18,11 +18,8 @@
     <ClCompile Include="admin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="menu.cpp">
+    <ClCompile Include="mainmenu.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="header.h">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="expert.cpp">
       <Filter>Source Files</Filter>
@@ -30,5 +27,10 @@
     <ClCompile Include="customer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mainheader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
