@@ -19,7 +19,7 @@ int main() {
         cout << "1. Admin" << endl;
         cout << "2. Expert" << endl;
         cout << "3. Customer" << endl;
-        cout << "Exit System" << endl;
+        cout << "4. Exit System" << endl;
         cout << "\nSelection: ";
         cin >> role;
         cout << "\n";
