@@ -2,34 +2,195 @@
 #include <iomanip>
 #include <string>
 #include <cctype>
+#include <algorithm>
 #include "mainheader.h"
 using namespace std;
 
 void clearInputBuffer() {
     char c;
     while ((c = cin.get()) != '\n' && c != EOF) {
-        // Just discard characters, it helps such that username and password don' t get stuck together
+        // Just discard characters, it helps such that username and password don't get stuck together
     }
 }
 
-void customer() {
+int getValidatedInput(int min, int max, const string& prompt) {
+    int input;
+
+    while (true) {
+        cout << prompt << " (" << min << "-" << max << "): ";
+        cin >> input;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "[ERROR] Invalid Selection! Please Enter Digits Only.\n" << endl;
+            continue;
+        }
+
+        if (input < min || input > max) {
+            cout << "[ERROR] Invalid Selection! Please Try Again.\n" << endl;
+            continue;
+        }
+        return input;
+    }
+}
+
+bool processPayment(double amount, string service) {
+    string cardNumber, cvv, expiry, confirm1;
+    char confirm2;
+    const double SERVICE_CHARGE = 100.00;
+    double total;
+
+    cout << "=== Payment Gateway ===" << endl;
+    cout << "Service\t: " << service << endl;
+    cout << "Amount to Pay: RM" << amount << " (Service Price) + " << "RM" << SERVICE_CHARGE << " (Service Charge)" << endl;
+    total = amount + SERVICE_CHARGE;
+    cout << "Total Payment: RM" << total << endl;
+
+    // Validate Card Number
+    while (true) {
+        cout << "Enter Card Number (16 digits): ";
+        cin >> cardNumber;
+
+        if (cardNumber.length() == 16 && all_of(cardNumber.begin(), cardNumber.end(), ::isdigit)) {
+            break;
+        }
+        else {
+            cout << "[ERROR] Invalid Card Number! Please enter exactly 16 digits.\n" << endl;
+        }
+    }
+
+    // Validate Expiry Date
+    while (true) {
+        cout << "Enter Expiry Date (MM/YY): ";
+        cin >> expiry;
+
+        if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
+            expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
+            break;
+        }
+        else {
+            cout << "[ERROR] Invalid Expiry Date! Format must be MM/YY.\n" << endl;
+        }
+    }
+
+    // Validate CVV
+    while (true) {
+        cout << "Enter CVV (3 digits): ";
+        cin >> cvv;
+
+        if (cvv.length() == 3 && all_of(cvv.begin(), cvv.end(), ::isdigit)) {
+            break;
+        }
+        else {
+            cout << "[ERROR] Invalid CVV! Please enter exactly 3 digits.\n" << endl;
+        }
+    }
+
+    // Confirm Payment
+    while (true) {
+        cout << "\nConfirm Payment? (Y/N): ";
+        cin >> confirm1;
+
+        if (confirm1.length() == 1) {
+            confirm2 = confirm1[0];
+            if (confirm2 == 'Y' || confirm2 == 'y') {
+                cout << "\n[OK] Payment Successful!" << endl;
+                return true;
+            }
+            else if (confirm2 == 'N' || confirm2 == 'n') {
+                cout << "\n[OOPS] Payment Cancelled!" << endl;
+                return false;
+            }
+            else {
+                cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+            }
+        }
+        else {
+            cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+        }
+    }
+}
+
+struct Booking {
+    string expertName;
+    string service;
+    int week;
+    int slot;
+    double amount;
+};
+
+string getExpertName(int serviceChoice) {
+    switch (serviceChoice) {
+    case 0: 
+        return "Joshua Loke";     // Nail Art
+    case 1: 
+        return "Joseph Lee";      // Pedicure & Manicure
+    case 2: 
+        return "Chan Kum Long";   // Acrylic Nails
+    default: 
+        return "Unknown Expert";
+    }
+}
+
+void addBooking(Booking bookingList[], int& bookingCount, string expertName,
+    string service, int week, int slot, double amount)
+{
+    if (bookingCount < 100) {
+        bookingList[bookingCount].expertName = expertName;
+        bookingList[bookingCount].service = service;
+        bookingList[bookingCount].week = week;
+        bookingList[bookingCount].slot = slot;
+        bookingList[bookingCount].amount = amount;
+        bookingCount++;
+    }
+    else {
+        cout << "[ERROR] Booking list is full!" << endl;
+    }
+}
+
+void showBookings(Booking bookingList[], int bookingCount) {
+    cout << string(14, '=') << " My Bookings " << string(14, '=') << endl;
+    if (bookingCount == 0) {
+        cout << "No bookings found." << endl;
+        return;
+    }
+
+    for (int i = 0; i < bookingCount; i++) {
+        cout << "\nBooking #" << i + 1 << endl;
+        cout << "Expert  : " << bookingList[i].expertName << endl;
+        cout << "Service : " << bookingList[i].service << endl;
+        cout << "Week    : " << bookingList[i].week << endl;
+        cout << "Slot    : " << bookingList[i].slot << endl;
+        cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
+        cout << string(41, '-') << endl;
+    }
+}
+
+void customer(ExpertInfo experts[], int count) {
     char username[50];
-    string password, expectedpw;
+    string password, expectedpw, payment, service;
+    const double NAIL_ART_PRICE = 600.00;
+    const double PEDI_MANICURE_PRICE = 300.00;
+    const double ACRYLIC_PRICE = 750.00;
+    const int MAX_BOOKINGS = 100;
+    Booking bookingList[MAX_BOOKINGS];
+    int bookingCount = 0;
     bool validUsername = false;
 
     clearInputBuffer(); // Clear leftover newline
-    
+
     cout << "===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n";
 
     while (!validUsername) {
         cout << "Enter Username: ";
         cin.getline(username, 50);
 
-        if (username[0] == '\0' || username[1] == '\0') {
+        if (username[0] == '\0' || username [1] == '\0') {
             cout << "\n[ERROR] Username must contain only letters and spaces. Please Try Again." << endl;
             continue;
         }
-        
+
         validUsername = true; // Assume valid until proven otherwise
 
         for (int i = 0; username[i] != '\0'; i++) {
@@ -53,8 +214,8 @@ void customer() {
 
         expectedpw = string(username) + "123";
 
-        if (password[0] == '\0' || password[1] == '\0') {
-            cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
+        if (password.empty()) {
+            cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
             continue;
         }
 
@@ -77,7 +238,7 @@ void customer() {
 
     // Menu loop
     while (!exitMenu) {
-        cout << "Welcome, " << username << "!\n";
+        cout << "Welcome, " << username << "!" << endl;
         cout << "What would you like to do today?" << endl;
         cout << "1. View Information About ChromaNails Studio\n";
         cout << "2. View Services & Experts\n";
@@ -89,93 +250,220 @@ void customer() {
         system("CLS");
 
         if (option == 1) {
-            cout << "..." << endl;
+            cout << string(80, '=') << endl;
+            cout << right << setw(58) << "CHROMANAILS STUDIO - NAIL CARE & ART" << endl;
+            cout << string(80, '=') << "\n" << endl;
+
+            cout << "About Us:\n";
+            cout << "At ChromaNails Studio, we turn nails into a canvas of beauty and creativity.\n";
+            cout << "Whether you are after elegant simplicity, bold trends, or long-lasting styles,\n";
+            cout << "our professional nail artists deliver precision and care.\n\n";
+
+            cout << "Vision:\n";
+            cout << "To be the go-to nail studio where beauty meets artistry,\n";
+            cout << "inspiring confidence through creative nail designs and quality care.\n\n";
+
+            cout << "Mission:\n";
+            cout << "- Provide top-quality nail care and art with attention to detail.\n";
+            cout << "- Ensure a relaxing, clean, and welcoming experience for all clients.\n";
+            cout << "- Use safe, high-quality products for healthy and lasting results.\n";
+            cout << "- Bring clients' ideas to life through innovative nail artistry.\n\n";
+
+            cout << "Operating Hours:\n";
+            cout << "Monday - Friday : 10:00 AM - 8:00 PM\n";
+            cout << "Saturday - Sunday: 11:00 AM - 9:00 PM\n";
+            cout << "Closed on Public Holidays\n\n";
+
+            cout << "Contact Details:\n";
+            cout << "Address : Lot 12, Glamour Street, City Center, Kuala Lumpur\n";
+            cout << "Phone   : +60 12-345 6789\n";
+            cout << "Email   : hello@chromanails.com\n";
+            cout << "Website : www.chromanails.com\n";
+            cout << "Instagram / Facebook: @ChromaNailsStudio\n\n";
+
+            cout << "Available Categories of Services:\n";
+            cout << "1. Nail Art" << endl;
+            cout << "   - Hand-painted Designs\n";
+            cout << "   - Gel Polish Art\n";
+            cout << "   - Custom & Seasonal Themes\n";
+            cout << "\n2. Manicure & Pedicure" << endl;
+            cout << "   - Classic Manicure & Pedicure\n";
+            cout << "   - Spa Treatment for Hands & Feet\n";
+            cout << "\n3. Acrylic Nails" << endl;
+            cout << "   - Full Set Acrylic Extensions\n";
+            cout << "   - Acrylic Nail Refills\n";
+            cout << "   - Acrylic Nail Art Add-ons\n";
+
+            cout << "\nPress [ENTER] to return to Customer Menu.....";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
+            system("CLS");
         }
         else if (option == 2) {
-            char choice, decision;
+            string choice1, decision1, paymentchoice1;
+            char choice2, decision2, paymentchoice2;
             cout << "Service: Nail Care & Art\n" << endl;
             cout << "Expert 1: JOSHUA LOKE" << endl;
             cout << "Specialization: Nail Art" << endl;
-            cout << "Availability: Weekdays 8AM - 8PM" << endl;         //Subject to change
+            cout << "Availability: Weekdays 9AM - 3PM" << endl;
+            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
             cout << "Service Price: RM600\n" << endl;
 
             cout << "Expert 2: JOSEPH LEE" << endl;
             cout << "Specialization: Manicure & Pedicure" << endl;
-            cout << "Availability: MON - SAT 10AM - 8PM" << endl;       //Subject to change
+            cout << "Availability: Weekdays 9AM - 3PM" << endl;
+            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
             cout << "Service Price: RM300 Each\n" << endl;
 
             cout << "Expert 3: CHAN KUM LONG" << endl;
             cout << "Specialization: Acrylic Nails" << endl;
-            cout << "Availability: Weekends 10AM - 4PM" << endl;        //Subject to change
-            cout << "Service Price: RM750\n" << endl;
+            cout << "Availability: Weekdays 9AM - 3PM" << endl;
+            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
+            cout << "Service Price: RM750" << endl;
 
-            cout << "Do you want to check appointment availability? (Y/N): ";
-            cin >> choice;
+            while (true) {
+                cout << "\nDo you want to check appointment availability? (Y/N): ";
+                /*cin.clear();
+                cin.ignore();
+                getline(cin, choice1);*/
+                cin >> choice1;
 
-            switch (choice) {
-            case 'Y':
-            case 'y':
-                ShowAllSchedules();
-                cout << "\nDo you want to book an appointment? (Y/N): ";
-                cin >> decision;
-
-                switch (decision) {
+                if (choice1.length() != 1) {
+                    cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                    continue;
+                }
+                choice2 = choice1[0];
+                switch (choice2) {
                 case 'Y':
                 case 'y':
-                    int expertChoice, weekChoice, slotChoice;
+                    int serviceChoice, expertIndex;
+                    serviceChoice = getValidatedInput(1, 3, "Choose Service");
+                    expertIndex = serviceChoice - 1;
 
-                    cout << "\nChoose Expert (1-3): ";
-                    cin >> expertChoice;
-                    cout << "Choose Week (1-4): ";
-                    cin >> weekChoice;
-                    cout << "Choose Slot (1-8): ";
-                    cin >> slotChoice;
-                    system("CLS");
+                    ShowExpertSchedule(experts, count, expertIndex);
 
-                    expertChoice--; weekChoice--; slotChoice--;
+                    while (true) {
+                        cout << "\nDo you want to book an appointment? (Y/N): ";
+                        cin >> decision1;
+                        //getline(cin, decision1);
 
-                    if (expertChoice >= 0 && expertChoice < 3 &&
-                        weekChoice >= 0 && weekChoice < WEEKS &&
-                        slotChoice >= 0 && slotChoice < SLOTS_PER_DAY) {
-
-                        if (experts[expertChoice].slots[weekChoice][slotChoice] == "FREE") {
-                            experts[expertChoice].slots[weekChoice][slotChoice] = "BOOKED";
-                            cout << "[OK] Booking confirmed!\n";
+                        if (decision1.length() != 1) {
+                            cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                            continue;
                         }
-                        else {
-                            cout << "[ERROR] Slot already booked.\n";
+                        decision2 = decision1[0];
+                        switch (decision2) {
+                        case 'Y':
+                        case 'y':
+                            int weekChoice, slotChoice;
+
+                            weekChoice = getValidatedInput(1, 4, "Choose Week");
+                            slotChoice = getValidatedInput(1, 8, "Choose Slot");
+
+                            //Post-Decrement
+                            serviceChoice--; weekChoice--; slotChoice--;
+                            while (true) {
+                                if (experts[serviceChoice].slots[weekChoice][slotChoice] == "FREE") {
+                                    cout << "\nSlot is Available" << endl;
+
+                                    double amount = 0.00;
+                                    switch (serviceChoice) {
+                                    case 0:
+                                        amount = NAIL_ART_PRICE;
+                                        service = "Nail Art";
+                                        break;
+                                    case 1:
+                                        amount = PEDI_MANICURE_PRICE;
+                                        service = "Pedicure & Manicure";
+                                        break;
+                                    case 2:
+                                        amount = ACRYLIC_PRICE;
+                                        service = "Acrylic Nails";
+                                        break;
+                                    }
+
+                                    cout << "You have selected the service: " << service << endl;
+                                    cout << "The amount to be payed is RM" << amount << endl;
+                                    cout << "Proceed with payment to confirm booking? (Y/N): ";
+                                    cin >> paymentchoice1;
+
+                                    if (paymentchoice1.length() == 1) {
+                                        paymentchoice2 = paymentchoice1[0];
+                                        if (paymentchoice2 == 'Y' || paymentchoice2 == 'y') {
+                                            system("CLS");
+                                            if (processPayment(amount, service)) {
+                                                cout << "[SUCCESS] Payment Confirmed!" << endl;
+                                                experts[serviceChoice].slots[weekChoice][slotChoice] = "BOOKED";
+                                                cout << "\n[OK] Booking Confirmed!" << endl;
+
+                                                addBooking(bookingList, bookingCount,
+                                                    getExpertName(serviceChoice),
+                                                    service,
+                                                    weekChoice + 1,
+                                                    slotChoice + 1,
+                                                    amount);
+
+                                                cout << "\nPress [ENTER] to return to Customer Menu.....";
+                                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                                cin.get();
+                                            }
+                                            break;
+                                        }
+                                        else if (paymentchoice2 == 'N' || paymentchoice2 == 'n') {
+                                            cout << "[OOPS] Booking Cancelled! Returning to Menu......" << endl;
+                                            break;
+                                        }
+                                    }
+                                    cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                                }
+                                else {
+                                    cout << "[OOPS] Slot Already Booked! Please Try Again.\n" << endl;
+                                    weekChoice = getValidatedInput(1, 4, "Choose Week") - 1;
+                                    slotChoice = getValidatedInput(1, 8, "Choose Slot") - 1;
+                                }
+                            }
+                            break;
+                        case 'N':
+                        case 'n':
+                            system("CLS");
+                            break;
+                        default:
+                            cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                            continue;
                         }
+                        break;
                     }
-                    else {
-                        cout << "[ERROR] Invalid Selection!\n";
-                    }
-                    break;
                 case 'N':
                 case 'n':
                     system("CLS");
                     break;
                 default:
-                    cout << "Enter Y/y/N/n. Please Try Again." << endl;
+                    cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                    continue;
                 }
-                break;
-            case 'N':
-            case 'n':
-                system("CLS");
-                break;
-            default:
-                cout << "Enter Y/y/N/n. Please Try Again." << endl;
                 break;
             }
         }
         else if (option == 3) {
-           
+            system("CLS");
+            showBookings(bookingList, bookingCount);
+
+            cout << "\nPress [ENTER] to return to Customer Menu.....";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
+            system("CLS");
         }
         else if (option == 4) {
             exitMenu = true; // Leave customer menu
             system("CLS");
         }
+        else if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "[ERROR] Invalid Selection! Please Enter Digits Only." << endl;
+        }
         else {
-            cout << "[ERROR] Invalid Selection!\n";
+            cout << "[ERROR] Invalid Selection!" << endl;
         }
     }
 }

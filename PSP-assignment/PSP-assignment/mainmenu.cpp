@@ -1,12 +1,20 @@
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "mainheader.h"
 using namespace std;
 
 int main() {
-    InitSchedules(); // Initialize schedule to all FREE
     int role;
     bool exitProgram = false;
+
+    ExpertInfo experts[3] = {
+        {"JOSHUA LOKE", "123", {}},
+        {"JOSEPH LEE", "123", {}},
+        {"CHAN KUM LONG", "123", {}} 
+    };
+
+    InitSchedules(experts, 3);
 
     while (!exitProgram) {
         cout << "===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n" << endl;
@@ -15,23 +23,23 @@ int main() {
         cout << "If you are an Admin, choose 1\n"
             << "If you are an Expert, choose 2\n"
             << "If you are a Customer, choose 3\n"
-            << "If you wish to exit the booking system, choose other numbers\n" << endl;
+            << "Press any key to exit the program\n" << endl;
         cout << "1. Admin" << endl;
         cout << "2. Expert" << endl;
         cout << "3. Customer" << endl;
-        cout << "4. Exit System" << endl;
+        cout << "Exit System" << endl;
         cout << "\nSelection: ";
         cin >> role;
         cout << "\n";
 
         if (role == 1) {
-            admin();
+            admin(experts, 3);
         }
         else if (role == 2) {
-            Expert();
+            Expert(experts, 3);
         }
         else if (role == 3) {
-            customer();
+            customer(experts, 3);
         }
         else {
             exitProgram = true;

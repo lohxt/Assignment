@@ -3,22 +3,19 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
+#include<limits>
 #include "mainheader.h"
 using namespace std;
 
-// Define global data
-ExpertInfo experts[3] = {
-    {"JOSHUA LOKE", "123", {}},
-    {"JOSEPH LEE", "123", {}},
-    {"CHAN KUM LONG", "123", {}}
-};
 
-// Day names (global)
-std::string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
-// ===== Helper: Initialize all slots as FREE =====
-void InitSchedules() {
-    for (int e = 0; e < 3; e++) {
+string dayNames[DAYS] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+
+// ================== Helper Functions ==================
+
+// Initialize all slots as FREE
+void InitSchedules(ExpertInfo experts[], int count) {
+    for (int e = 0; e < count; e++) {
         for (int w = 0; w < WEEKS; w++) {
             for (int s = 0; s < TOTAL_SLOTS_WEEK; s++) {
                 experts[e].slots[w][s] = "FREE";
@@ -27,75 +24,85 @@ void InitSchedules() {
     }
 }
 
-// ===== Helper: Convert slot index to readable time (slot-of-day only) =====
+// Convert slot index to readable time (slot-of-day only)
 string SlotTime(int s) {
-    // s is 0..7 for 9am..4pm
-    int hour = 9 + s;
+    int hour = 9 + s; // slots start at 9am
     string ampm = (hour >= 12) ? "pm" : "am";
     int displayHour = (hour > 12) ? hour - 12 : hour;
     return to_string(displayHour) + ampm;
 }
 
- //===== Show all experts’ schedules =====
-void ShowAllSchedules() {
-    cout << "\n=== General December Schedule ===\n";
+// ================== Schedule Display ==================
+
+// Show all experts’ schedules
+void ShowAllSchedules(ExpertInfo experts[], int count) {
+    cout << "\n===== General December Schedule =====\n"; 
     for (int w = 0; w < WEEKS; w++) {
-        cout << "\nWeek " << w + 1 << ":\n";
+        cout << "\n----------- Week " << (w + 1) << " -----------\n"; 
         for (int d = 0; d < DAYS; d++) {
-            cout << "\n" << dayNames[d] << ":\n";
-            cout << setw(8) << "Time";
-            for (int e = 0; e < 3; e++) {
+            cout << "\n" << dayNames[d] << ":\n"; // Header row 
+            cout << left << setw(10) << "Time"; 
+            for (int e = 0; e < count; e++) {
                 cout << setw(15) << experts[e].username;
+            } 
+            cout << "\n" << string(10 + 15 * 3, '-') << "\n"; // Slot rows 
+            for (int t = 0; t < SLOTS_PER_DAY; t++) { 
+                int index = d * SLOTS_PER_DAY + t; 
+                cout << left << setw(10) << SlotTime(t); 
+                for (int e = 0; e < count; e++) {
+                    cout << setw(15) << experts[e].slots[w][index]; }
+                cout << "\n"; 
+            } 
+        } 
+    } 
+}
+
+// ===== Show one expert’s schedule in a table format =====
+void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
+    cout << "\n===== Schedule for " << experts[expertIndex].username << " =====\n";
+
+    for (int w = 0; w < WEEKS; w++) {
+        cout << "\n" << string(42, '=') << " Week " << (w + 1) << " " << string(42, '=') << endl;
+
+        // Header row: days
+        cout << left << setw(8) << "Time";
+        for (int d = 0; d < DAYS; d++) {
+            cout << setw(12) << dayNames[d];
+        }
+        cout << "\n" << string(8 + 12 * DAYS, '-') << "\n";
+
+        // Rows: each time slot across the week
+        for (int t = 0; t < SLOTS_PER_DAY; t++) {
+            cout << left << setw(8) << SlotTime(t);
+
+            for (int d = 0; d < DAYS; d++) {
+                int index = d * SLOTS_PER_DAY + t;
+                cout << setw(12) << experts[expertIndex].slots[w][index];
             }
             cout << "\n";
-
-            for (int t = 0; t < SLOTS_PER_DAY; t++) {
-                cout << setw(8) << SlotTime(t);
-                int index = d * SLOTS_PER_DAY + t; // map day+time to flat index (0..55)
-                for (int e = 0; e < 3; e++) {
-                    cout << setw(15) << experts[e].slots[w][index];
-                }
-                cout << "\n";
-            }
         }
     }
 }
 
-// ===== Show one expert’s schedule (uses flattened mapping) =====
-void ShowExpertSchedule(int expertIndex) {
-    cout << "\n=== Schedule for " << experts[expertIndex].username << " ===\n";
-    for (int w = 0; w < WEEKS; w++) {
-        cout << "\nWeek " << w + 1 << ":\n";
-        for (int d = 0; d < DAYS; d++) {
-            cout << "\n" << dayNames[d] << ":\n";
-            cout << setw(8) << "Time" << setw(15) << "Status\n";
-            for (int t = 0; t < SLOTS_PER_DAY; t++) {
-                int index = d * SLOTS_PER_DAY + t;
-                cout << setw(8) << SlotTime(t)
-                     << setw(15) << experts[expertIndex].slots[w][index] << "\n";
-            }
-        }
-    }
-}
-
-// ===== Expert login & schedule view =====
-void Expert() {
-    string username;
-    string password;
+// ================== Expert Login & Menu ==================
+void Expert(ExpertInfo experts[], int count) {
+    string username, password;
 
     clearInputBuffer();
 
     cout << "===== CHROMANAILS STUDIO EXPERT MENU =====\n";
-    
+
     int loggedExpert = -1;
+
+    // ===== Login Loop =====
     while (true) {
         cout << "Enter Username: ";
         getline(cin, username);
 
-        // uppercase the input for comparison
-        for (char &c : username) c = toupper(static_cast<unsigned char>(c));
+        // Uppercase for comparison
+        transform(username.begin(), username.end(), username.begin(), ::toupper);
 
-        // find matching expert
+        // Check against experts
         loggedExpert = -1;
         for (int i = 0; i < 3; i++) {
             if (username == experts[i].username) {
@@ -105,7 +112,7 @@ void Expert() {
         }
 
         if (loggedExpert == -1) {
-            cout << "\nExpert Unidentified. Please Try Again\n";
+            cout << "\n[ERROR] Expert not found. Please try again.\n";
             continue;
         }
 
@@ -121,51 +128,47 @@ void Expert() {
 
     system("CLS");
 
+    // ===== Expert Menu =====
     int option;
     bool exitMenu = false;
 
     while (!exitMenu) {
-        cout << "Welcome, Expert " << username << "!\n";
+        cout << "Welcome, Expert " << experts[loggedExpert].username << "!" << endl;
         cout << "What would you like to do today?" << endl;
-        cout << "1. View Individual Schedule\n";
+        cout << "1. View Individual Schedule\n";    
         cout << "2. View Assigned Customer List\n";
         cout << "3. View Earnings Bonus Entitlement\n";
-        cout << "4. Exit to Main Menu\n" << endl;
+        cout << "4. Exit to Main Menu\n\n";
         cout << "Selection: ";
-        cin >> option;
+
+        if (!(cin >> option)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\n[ERROR] Invalid input. Please enter a number.\n";
+            continue;
+        }
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clean newline after numeric input
 
-        if (option == 1) {
-            ShowExpertSchedule(loggedExpert);
-        }
-        else if (option == 2) {
-            // TODO: implement
-        }
-        else if (option == 3) {
-            // TODO: implement
-        }
-        else if (option == 4) {
-            exitMenu = true;
-            system("CLS");
-        }
-        else {
-            cout << "[ERROR] Invalid Selection!\n";
+        switch (option) {
+            case 1: 
+                ShowExpertSchedule(experts, count, loggedExpert);
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                system("CLS");
+                break;
+            case 2: 
+                cout << "[TODO] View Assigned Customer List\n"; 
+                break;
+            case 3: 
+                cout << "[TODO] View Earnings Bonus Entitlement\n"; 
+                break;
+            case 4: 
+                exitMenu = true; 
+                system("CLS");
+                break;
+            default: 
+                cout << "[ERROR] Invalid Selection!\n";
+                break;
         }
     }
 }
-
-    /*cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "Username: ";
-    getline(cin, username);
-    cout << "Password: ";
-    cin >> password;
-
-    for (int i = 0; i < 3; i++) {
-        if (username == experts[i].username && password == experts[i].password) {
-            cout << "\n[OK] Login successful!\n";
-            ShowExpertSchedule(i);
-            return;
-        }
-    }
-    cout << "\n[ERROR] Invalid username or password.\n";
-}*/

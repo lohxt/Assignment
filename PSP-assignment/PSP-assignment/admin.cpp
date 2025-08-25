@@ -4,7 +4,7 @@
 #include "mainheader.h"
 using namespace std;
 
-void Indi_schedule() {
+void Indi_schedule(ExpertInfo experts[], int count) {
     int ex;
     cout << "Select an expert:\n";
     cout << "1. " << experts[0].username << "\n";
@@ -13,15 +13,15 @@ void Indi_schedule() {
     cin >> ex;
 
     if (ex >= 1 && ex <= 3) {
-        ShowExpertSchedule(ex - 1);
+        ShowExpertSchedule(experts, count, ex - 1);
     }
     else {
         cout << "Invalid expert selection.\n";
     }
 }
 
-void Schedule() {
-    ShowAllSchedules();
+void Schedule(ExpertInfo experts[], int count) {
+    ShowAllSchedules(experts, count);
 }
 
 void Customer_list() {
@@ -36,9 +36,9 @@ void Expert_bonus() {
     cout << "Calculating expert bonus... (Feature pending)\n";
 }
 
-void admin() {
+void admin(ExpertInfo experts[], int count) {
     char username[50];
-    string password;
+    string password, expectedpw;
     bool validUsername = false;
 
     clearInputBuffer();
@@ -68,12 +68,32 @@ void admin() {
         }
     }
 
+    while (true) {
+        cout << "Password: ";
+        getline(cin, password);
+
+        for (int i = 0; password[i] != '\0'; i++) {
+            password[i] = tolower(password[i]);
+        }
+
+        expectedpw = string(username) + "123";
+
+        if (password[0] == '\0' || password[1] == '\0') {
+            cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
+            continue;
+        }
+
+        if (password != expectedpw) {
+            cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
+        }
+        else {
+            break;
+        }
+    }
+
     for (int i = 0; username[i] != '\0'; i++) {
         username[i] = toupper(username[i]);
     }
-
-    cout << "Password: ";
-    cin >> password;
 
     system("CLS");
 
@@ -82,8 +102,8 @@ void admin() {
 
     // Menu loop
     while (!exitMenu) {
-        cout << "Welcome, Admin " << username << "!\n";
-        cout << "What do you want to look at?\n";
+        cout << "Welcome, Admin " << username << "!" << endl;
+        cout << "What do you want to look at?" << endl;
         cout << "1. Individual Expert Schedule\n"
             << "2. Overall Schedule\n"
             << "3. Customer List\n"
@@ -95,10 +115,10 @@ void admin() {
 
         switch (option) {
         case 1:
-            Indi_schedule();
+            Indi_schedule(experts, 3);
             break;
         case 2:
-            Schedule();
+            Schedule(experts, 3);
             break;
         case 3:
             Customer_list();
