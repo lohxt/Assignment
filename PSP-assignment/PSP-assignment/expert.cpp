@@ -3,7 +3,6 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
-#include<limits>
 #include "mainheader.h"
 using namespace std;
 
@@ -143,17 +142,17 @@ void Expert(ExpertInfo experts[], int count) {
 
         if (!(cin >> option)) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			clearInputBuffer();
             cout << "\n[ERROR] Invalid input. Please enter a number.\n";
             continue;
         }
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clean newline after numeric input
+        clearInputBuffer(); // clean newline after numeric input
 
         switch (option) {
             case 1: 
                 ShowExpertSchedule(experts, count, loggedExpert);
                 cout << "\nPress [ENTER] to return to Expert Menu.....";
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                clearInputBuffer();
                 system("CLS");
                 break;
             case 2: 

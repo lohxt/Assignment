@@ -295,7 +295,7 @@ void customer(ExpertInfo experts[], int count) {
             cout << "   - Acrylic Nail Art Add-ons\n";
 
             cout << "\nPress [ENTER] to return to Customer Menu.....";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            clearInputBuffer();
             cin.get();
             system("CLS");
         }
@@ -404,7 +404,7 @@ void customer(ExpertInfo experts[], int count) {
                                                     amount);
 
                                                 cout << "\nPress [ENTER] to return to Customer Menu.....";
-                                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+												clearInputBuffer();
                                                 cin.get();
                                             }
                                             break;
@@ -449,7 +449,7 @@ void customer(ExpertInfo experts[], int count) {
             showBookings(bookingList, bookingCount);
 
             cout << "\nPress [ENTER] to return to Customer Menu.....";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			clearInputBuffer();
             cin.get();
             system("CLS");
         }
