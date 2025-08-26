@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "mainheader.h"
 using namespace std;
+const char* daynames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 
 void clearInputBuffer() {
     char c;
@@ -116,6 +117,7 @@ struct Booking {
     string expertName;
     string service;
     int week;
+    int day;
     int slot;
     double amount;
 };
@@ -134,12 +136,13 @@ string getExpertName(int serviceChoice) {
 }
 
 void addBooking(Booking bookingList[], int& bookingCount, string expertName,
-    string service, int week, int slot, double amount)
+    string service, int week, int day, int slot, double amount)
 {
     if (bookingCount < 100) {
         bookingList[bookingCount].expertName = expertName;
         bookingList[bookingCount].service = service;
         bookingList[bookingCount].week = week;
+		bookingList[bookingCount].day = day;
         bookingList[bookingCount].slot = slot;
         bookingList[bookingCount].amount = amount;
         bookingCount++;
@@ -161,6 +164,7 @@ void showBookings(Booking bookingList[], int bookingCount) {
         cout << "Expert  : " << bookingList[i].expertName << endl;
         cout << "Service : " << bookingList[i].service << endl;
         cout << "Week    : " << bookingList[i].week << endl;
+		cout << "Day     : " << daynames[bookingList[i].day] << endl;
         cout << "Slot    : " << bookingList[i].slot << endl;
         cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
         cout << string(41, '-') << endl;
@@ -306,19 +310,16 @@ void customer(ExpertInfo experts[], int count) {
             cout << "Expert 1: JOSHUA LOKE" << endl;
             cout << "Specialization: Nail Art" << endl;
             cout << "Availability: Weekdays 9AM - 3PM" << endl;
-            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
             cout << "Service Price: RM600\n" << endl;
 
             cout << "Expert 2: JOSEPH LEE" << endl;
             cout << "Specialization: Manicure & Pedicure" << endl;
             cout << "Availability: Weekdays 9AM - 3PM" << endl;
-            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
             cout << "Service Price: RM300 Each\n" << endl;
 
             cout << "Expert 3: CHAN KUM LONG" << endl;
             cout << "Specialization: Acrylic Nails" << endl;
             cout << "Availability: Weekdays 9AM - 3PM" << endl;
-            cout << setw(33) << "Weekends 10AM - 2PM" << endl;
             cout << "Service Price: RM750" << endl;
 
             while (true) {
@@ -355,15 +356,17 @@ void customer(ExpertInfo experts[], int count) {
                         switch (decision2) {
                         case 'Y':
                         case 'y':
-                            int weekChoice, slotChoice;
+                            int weekChoice, dayChoice, slotChoice;
 
                             weekChoice = getValidatedInput(1, 4, "Choose Week");
-                            slotChoice = getValidatedInput(1, 8, "Choose Slot");
+							dayChoice = getValidatedInput(1, 5, "Choose Day");
+                            slotChoice = getValidatedInput(1, 6, "Choose Slot");
 
                             //Post-Decrement
-                            serviceChoice--; weekChoice--; slotChoice--;
+                            serviceChoice--; weekChoice--; dayChoice--; slotChoice--;
                             while (true) {
-                                if (experts[serviceChoice].slots[weekChoice][slotChoice] == "FREE") {
+								int index = dayChoice * SLOTS_PER_DAY + slotChoice;
+                                if (experts[serviceChoice].slots[weekChoice][index] == "FREE") {
                                     cout << "\nSlot is Available" << endl;
 
                                     double amount = 0.00;
@@ -393,13 +396,14 @@ void customer(ExpertInfo experts[], int count) {
                                             system("CLS");
                                             if (processPayment(amount, service)) {
                                                 cout << "[SUCCESS] Payment Confirmed!" << endl;
-                                                experts[serviceChoice].slots[weekChoice][slotChoice] = "BOOKED";
+                                                experts[serviceChoice].slots[weekChoice][index] = "BOOKED";
                                                 cout << "\n[OK] Booking Confirmed!" << endl;
 
                                                 addBooking(bookingList, bookingCount,
                                                     getExpertName(serviceChoice),
                                                     service,
                                                     weekChoice + 1,
+													dayChoice,
                                                     slotChoice + 1,
                                                     amount);
 
@@ -419,7 +423,8 @@ void customer(ExpertInfo experts[], int count) {
                                 else {
                                     cout << "[OOPS] Slot Already Booked! Please Try Again.\n" << endl;
                                     weekChoice = getValidatedInput(1, 4, "Choose Week") - 1;
-                                    slotChoice = getValidatedInput(1, 8, "Choose Slot") - 1;
+									dayChoice = getValidatedInput(1, 5, "Choose Day") - 1;
+                                    slotChoice = getValidatedInput(1, 6, "Choose Slot") - 1;
                                 }
                             }
                             break;

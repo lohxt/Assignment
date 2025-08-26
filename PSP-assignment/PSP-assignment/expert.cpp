@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-string dayNames[DAYS] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+string dayNames[DAYS] = {"Mon", "Tue", "Wed", "Thu", "Fri"};
 
 // ================== Helper Functions ==================
 
@@ -105,6 +105,11 @@ string SlotTime(int expertIndex, int t) {
 // Show all experts’ schedules
 void ShowAllSchedules(ExpertInfo experts[], int count) {
     cout << "\n===== General December Schedule =====\n"; 
+    // Add session notes
+    cout << "\n[NOTE] Slot durations by service:\n";
+    cout << " - Nail Care: 2 hours (9–11, 11–1, 1–3)\n";
+    cout << " - Pedicure & Manicure: 1 hour (9–10, 10–11, … , 2–3)\n";
+    cout << " - Acrylic Nails: 2 hours (9–11, 11–1, 1–3)\n";
     for (int w = 0; w < WEEKS; w++) {
         cout << "\n----------- Week " << (w + 1) << " -----------\n"; 
         for (int d = 0; d < DAYS; d++) {
@@ -131,7 +136,7 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
                 for (int e = 0; e < count; e++) {
                     cout << setw(15) << experts[e].slots[w][index];
                 }
-                cout << "\n";
+                cout << "\n\n";
             }
         } 
     } 
@@ -169,7 +174,13 @@ void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
                 cout << setw(12) << experts[expertIndex].slots[w][index];
             }
             cout << "\n";
-        }
+        }            // Add session note per expert
+        if (expertIndex == 0)
+            cout << "(Note: Nail Care sessions are 2 hours each: 9-11, 11-1, 1-3)\n";
+        else if (expertIndex == 1)
+            cout << "(Note: Pedicure & Manicure sessions are 1 hour each: 9-10 … 2-3)\n";
+        else if (expertIndex == 2)
+            cout << "(Note: Acrylic Nails sessions are 2 hours each: 9-11, 11-1, 1-3)\n";
     }
 }
 

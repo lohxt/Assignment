@@ -3,9 +3,9 @@
 
 // ===== Calendar settings =====
 const int WEEKS = 4;
-const int DAYS = 7;
-const int SLOTS_PER_DAY = 8; // 9am - 4pm with 1-hour slots
-const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 56
+const int DAYS = 5;
+const int SLOTS_PER_DAY = 6; // 9am - 3pm with 1-hour slots
+const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 30
 
 // Expert structure
 struct ExpertInfo {
