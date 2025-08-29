@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <string>
 #include <cctype>
-#include <algorithm>
 #include "mainheader.h"
 using namespace std;
 const char* daynames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
@@ -53,12 +52,16 @@ bool processPayment(double amount, string service) {
         cout << "Enter Card Number (16 digits): ";
         cin >> cardNumber;
 
-        if (cardNumber.length() == 16 && all_of(cardNumber.begin(), cardNumber.end(), ::isdigit)) {
-            break;
+        bool validCard = (cardNumber.length() == 16);
+        if (validCard) {
+            for (int i = 0; i < 16; ++i) {
+                if (!isdigit(cardNumber[i])) { validCard = false; break; }
+            }
         }
-        else {
-            cout << "[ERROR] Invalid Card Number! Please enter exactly 16 digits.\n" << endl;
-        }
+
+        if (validCard) break;
+
+        cout << "[ERROR] Invalid Card Number! Please enter exactly 16 digits.\n" << endl;
     }
 
     // Validate Expiry Date
@@ -80,12 +83,16 @@ bool processPayment(double amount, string service) {
         cout << "Enter CVV (3 digits): ";
         cin >> cvv;
 
-        if (cvv.length() == 3 && all_of(cvv.begin(), cvv.end(), ::isdigit)) {
-            break;
+        bool validCVV = (cvv.length() == 3);
+        if (validCVV) {
+            for (int i = 0; i < 3; ++i) {
+                if (!isdigit(cvv[i])) { validCVV = false; break; }
+            }
         }
-        else {
-            cout << "[ERROR] Invalid CVV! Please enter exactly 3 digits.\n" << endl;
-        }
+
+        if (validCVV) break;
+
+        cout << "[ERROR] Invalid CVV! Please enter exactly 3 digits.\n" << endl;
     }
 
     // Confirm Payment
@@ -462,6 +469,7 @@ void customer(ExpertInfo experts[], int count) {
                         }
                         break;
                     } while (true);
+					break;
                 case 'N':
                 case 'n':
                     system("CLS");

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <algorithm>
 #include <cctype>
 #include "mainheader.h"
 using namespace std;
@@ -200,7 +199,9 @@ void Expert(ExpertInfo experts[], int count) {
         getline(cin, username);
 
         // Uppercase for comparison
-        transform(username.begin(), username.end(), username.begin(), ::toupper);
+        for (int i = 0; i < username.length(); i++) {
+            username[i] = toupper(username[i]);
+        }
 
         // Check against experts
         loggedExpert = -1;
