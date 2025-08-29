@@ -180,13 +180,13 @@ void customer(ExpertInfo experts[], int count) {
     const int MAX_BOOKINGS = 100;
     Booking bookingList[MAX_BOOKINGS];
     int bookingCount = 0;
-    bool validUsername = false;
+    bool validUsername = false, validPassword = false;
 
     clearInputBuffer(); // Clear leftover newline
 
     cout << "===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n";
 
-    while (!validUsername) {
+    do {
         cout << "Enter Username: ";
         cin.getline(username, 50);
 
@@ -206,9 +206,9 @@ void customer(ExpertInfo experts[], int count) {
         if (!validUsername) {
             cout << "\n[ERROR] Username must contain only letters and spaces. Please Try Again." << endl;
         }
-    }
+    } while (!validUsername);
 
-    while (true) {
+    do {
         cout << "Password: ";
         getline(cin, password);
 
@@ -227,9 +227,10 @@ void customer(ExpertInfo experts[], int count) {
             cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
         }
         else {
+            validPassword = true;
             break;
         }
-    }
+    } while (!validPassword);
 
     for (int i = 0; username[i] != '\0'; i++) {
         username[i] = toupper(username[i]);
@@ -241,7 +242,7 @@ void customer(ExpertInfo experts[], int count) {
     bool exitMenu = false;
 
     // Menu loop
-    while (!exitMenu) {
+    do {
         cout << "Welcome, " << username << "!" << endl;
         cout << "What would you like to do today?" << endl;
         cout << "1. View Information About ChromaNails Studio\n";
@@ -322,7 +323,7 @@ void customer(ExpertInfo experts[], int count) {
             cout << "Availability: Weekdays 9AM - 3PM" << endl;
             cout << "Service Price: RM750" << endl;
 
-            while (true) {
+            do {
                 cout << "\nDo you want to check appointment availability? (Y/N): ";
                 /*cin.clear();
                 cin.ignore();
@@ -343,7 +344,7 @@ void customer(ExpertInfo experts[], int count) {
 
                     ShowExpertSchedule(experts, count, expertIndex);
 
-                    while (true) {
+                    do {
                         cout << "\nDo you want to book an appointment? (Y/N): ";
                         cin >> decision1;
                         //getline(cin, decision1);
@@ -376,8 +377,31 @@ void customer(ExpertInfo experts[], int count) {
                                         service = "Nail Art";
                                         break;
                                     case 1:
-                                        amount = PEDI_MANICURE_PRICE;
-                                        service = "Pedicure & Manicure";
+                                        int subChoice;
+                                        do {
+                                            cout << "\nSelect Specific Service:\n";
+                                            cout << "1. Manicure (RM300)\n";
+                                            cout << "2. Pedicure (RM300)\n";
+                                            cout << "\nSelection: ";
+                                            cin >> subChoice;
+
+                                            if (cin.fail() || (subChoice != 1 && subChoice != 2)) {
+                                                cin.clear();
+                                                cin.ignore(1000, '\n');
+                                                cout << "[ERROR] Invalid Selection! Please Enter 1 or 2.\n";
+                                                continue;
+                                            }
+
+                                            if (subChoice == 1) {
+                                                amount = PEDI_MANICURE_PRICE;
+                                                service = "Manicure";
+                                            }
+                                            else {
+                                                amount = PEDI_MANICURE_PRICE;
+                                                service = "Pedicure";
+                                            }
+                                            break;
+                                        } while (true);
                                         break;
                                     case 2:
                                         amount = ACRYLIC_PRICE;
@@ -437,7 +461,7 @@ void customer(ExpertInfo experts[], int count) {
                             continue;
                         }
                         break;
-                    }
+                    } while (true);
                 case 'N':
                 case 'n':
                     system("CLS");
@@ -447,7 +471,7 @@ void customer(ExpertInfo experts[], int count) {
                     continue;
                 }
                 break;
-            }
+            }while (true);
         }
         else if (option == 3) {
             system("CLS");
@@ -470,5 +494,5 @@ void customer(ExpertInfo experts[], int count) {
         else {
             cout << "[ERROR] Invalid Selection!" << endl;
         }
-    }
+    }while (!exitMenu);
 }

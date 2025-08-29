@@ -39,14 +39,14 @@ void Expert_bonus() {
 void admin(ExpertInfo experts[], int count) {
     char username[50];
     string password, expectedpw;
-    bool validUsername = false;
+    bool validUsername = false, validPassword = false;
 
     clearInputBuffer();
 
     // Login section
     cout << "===== CHROMANAILS STUDIO ADMIN MENU =====\n";
 
-    while (!validUsername) {
+    do {
         cout << "Enter Username: ";
         cin.getline(username, 50);
 
@@ -66,9 +66,9 @@ void admin(ExpertInfo experts[], int count) {
         if (!validUsername) {
             cout << "\n[ERROR] Username must contain only letters and spaces. Please Try Again." << endl;
         }
-    }
+    } while (!validUsername);
 
-    while (true) {
+    do {
         cout << "Password: ";
         getline(cin, password);
 
@@ -78,7 +78,7 @@ void admin(ExpertInfo experts[], int count) {
 
         expectedpw = string(username) + "123";
 
-        if (password[0] == '\0' || password[1] == '\0') {
+        if (password.empty()) {
             cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
             continue;
         }
@@ -87,9 +87,10 @@ void admin(ExpertInfo experts[], int count) {
             cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
         }
         else {
+            validPassword = true;
             break;
         }
-    }
+    } while (!validPassword);
 
     for (int i = 0; username[i] != '\0'; i++) {
         username[i] = toupper(username[i]);

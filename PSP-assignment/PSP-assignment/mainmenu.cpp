@@ -16,7 +16,7 @@ int main() {
 
     InitSchedules(experts, 3);
 
-    while (!exitProgram) {
+    do {
         cout << "===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n" << endl;
         cout << "WELCOME TO CHROMANAILS STUDIO'S BOOKING SYSTEM!" << endl;
         cout << "Please select the following options below:\n" << endl;
@@ -45,7 +45,7 @@ int main() {
             exitProgram = true;
             system("CLS");
         }
-    }
+    } while (!exitProgram);
     cout << "THANK YOU FOR USING CHROMANAILS STUDIO'S BOOKING SYSTEM! PLEASE COME AGAIN SOON!" << endl;
 
     return 0;

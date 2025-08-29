@@ -193,9 +193,9 @@ void Expert(ExpertInfo experts[], int count) {
     cout << "===== CHROMANAILS STUDIO EXPERT MENU =====\n";
 
     int loggedExpert = -1;
-
+    bool loggedIn = false;
     // ===== Login Loop =====
-    while (true) {
+    do {
         cout << "Enter Username: ";
         getline(cin, username);
 
@@ -211,20 +211,38 @@ void Expert(ExpertInfo experts[], int count) {
             }
         }
 
-        if (loggedExpert == -1) {
-            cout << "\n[ERROR] Expert not found. Please try again.\n";
+        if (username.empty()) {
+            cout << "\n[ERROR] Username cannot be empty! Please Try Again." << endl;
             continue;
         }
 
-        cout << "Password: ";
-        getline(cin, password);
-
-        if (password == experts[loggedExpert].password) {
-            break; // success
-        } else {
-            cout << "\n[ERROR] Invalid password. Please try again.\n";
+        if (loggedExpert == -1) {
+            cout << "\n[ERROR] Unknown Expert! Please Try Again.\n";
+            continue;
         }
-    }
+
+        bool validPassword = false;
+        do {
+            cout << "Password: ";
+            getline(cin, password);
+
+            if (password.empty()) {
+                cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
+                continue;
+            }
+
+            if ((loggedExpert == 0 && (password == "JOSH123" || password == "josh123")) ||
+                (loggedExpert == 1 && (password == "JOSEPH123" || password == "joseph123")) ||
+                (loggedExpert == 2 && (password == "CKL123" || password == "ckl123"))) {
+                validPassword = true;
+                loggedIn = true;
+                break;
+            }
+            else {
+                cout << "\n[ERROR] Wrong Password! Please Try Again.\n";
+            }
+        } while (!validPassword);
+    } while (!loggedIn);
 
     system("CLS");
 
@@ -232,7 +250,7 @@ void Expert(ExpertInfo experts[], int count) {
     int option;
     bool exitMenu = false;
 
-    while (!exitMenu) {
+    do {
         cout << "Welcome, Expert " << experts[loggedExpert].username << "!" << endl;
         cout << "What would you like to do today?" << endl;
         cout << "1. View Individual Schedule\n";    
@@ -270,5 +288,5 @@ void Expert(ExpertInfo experts[], int count) {
                 cout << "[ERROR] Invalid Selection!\n";
                 break;
         }
-    }
+    } while (!exitMenu);
 }
