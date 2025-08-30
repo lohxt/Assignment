@@ -9,9 +9,9 @@ int main() {
     bool exitProgram = false;
 
     ExpertInfo experts[3] = {
-        {"JOSHUA LOKE", "123", {}},
-        {"JOSEPH LEE", "123", {}},
-        {"CHAN KUM LONG", "123", {}} 
+        {"JOSHUA LOKE", "123"},
+        {"JOSEPH LEE", "123"},
+        {"CHAN KUM LONG", "123"} 
     };
 
     InitSchedules(experts, 3);

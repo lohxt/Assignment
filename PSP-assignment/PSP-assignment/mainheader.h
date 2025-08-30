@@ -4,14 +4,14 @@
 // ===== Calendar settings =====
 const int WEEKS = 4;
 const int DAYS = 5;
-const int SLOTS_PER_DAY = 6; // 9am - 3pm with 1-hour slots
-const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 30
+const int SLOTS_PER_DAY = 6; // 2 sessions per day, 3 hours each (9am-12pm, 12pm-3pm)
+const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 30 slots per week
 
 // Expert structure
 struct ExpertInfo {
     std::string username;
     std::string password;
-    std::string slots[WEEKS][TOTAL_SLOTS_WEEK]; // "FREE" or "BOOKED"
+    std::string slots[WEEKS][DAYS * SLOTS_PER_DAY] = { "FREE" }; // all slots default to "FREE"
 };
 
 // ===== Admin functions =====

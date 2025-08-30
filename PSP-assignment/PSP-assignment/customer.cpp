@@ -368,7 +368,7 @@ void customer(ExpertInfo experts[], int count) {
 
                             weekChoice = getValidatedInput(1, 4, "Choose Week");
 							dayChoice = getValidatedInput(1, 5, "Choose Day");
-                            slotChoice = getValidatedInput(1, 6, "Choose Slot");
+                            slotChoice = getValidatedInput(1, 2, "Choose Slot");
 
                             //Post-Decrement
                             serviceChoice--; weekChoice--; dayChoice--; slotChoice--;
@@ -455,7 +455,7 @@ void customer(ExpertInfo experts[], int count) {
                                     cout << "[OOPS] Slot Already Booked! Please Try Again.\n" << endl;
                                     weekChoice = getValidatedInput(1, 4, "Choose Week") - 1;
 									dayChoice = getValidatedInput(1, 5, "Choose Day") - 1;
-                                    slotChoice = getValidatedInput(1, 6, "Choose Slot") - 1;
+                                    slotChoice = getValidatedInput(1, 2, "Choose Slot") - 1;
                                 }
                             }
                             break;
