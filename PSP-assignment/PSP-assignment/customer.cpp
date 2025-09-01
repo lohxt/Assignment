@@ -120,38 +120,33 @@ bool processPayment(double amount, string service) {
     }
 }
 
-struct Booking {
-    string expertName;
-    string service;
-    int week;
-    int day;
-    int slot;
-    double amount;
-};
-
 string getExpertName(int serviceChoice) {
     switch (serviceChoice) {
     case 0: 
-        return "Joshua Loke";     // Nail Art
+        return "JOSHUA LOKE";     // Nail Art
     case 1: 
-        return "Joseph Lee";      // Pedicure & Manicure
+        return "JOSEPH LEE";      // Pedicure & Manicure
     case 2: 
-        return "Chan Kum Long";   // Acrylic Nails
+        return "CHAN KUM LONG";   // Acrylic Nails
     default: 
         return "Unknown Expert";
     }
 }
 
-void addBooking(Booking bookingList[], int& bookingCount, string expertName,
-    string service, int week, int day, int slot, double amount)
+void addBooking(Booking bookingList[], int& bookingCount,
+    const string& customerName,
+    const string& expertName,
+    const string& service,
+    int week, int day, int slot, double amount)
 {
-    if (bookingCount < 100) {
-        bookingList[bookingCount].expertName = expertName;
-        bookingList[bookingCount].service = service;
-        bookingList[bookingCount].week = week;
-		bookingList[bookingCount].day = day;
-        bookingList[bookingCount].slot = slot;
-        bookingList[bookingCount].amount = amount;
+    if (bookingCount < MAX_BOOKINGS) {
+        bookingList[bookingCount].customerName = customerName; // Store Customer Name
+        bookingList[bookingCount].expertName = expertName;     // Store Expert Name
+        bookingList[bookingCount].service = service;           // Store Service Name
+        bookingList[bookingCount].week = week;                 // Store The Week Chosen
+        bookingList[bookingCount].day = day;                   // Store The Day Chosen
+        bookingList[bookingCount].slot = slot;                 // Store The Slot Chosen (3hrs)
+        bookingList[bookingCount].amount = amount;             // Store The Amount of Money Paid
         bookingCount++;
     }
     else {
@@ -178,15 +173,13 @@ void showBookings(Booking bookingList[], int bookingCount) {
     }
 }
 
-void customer(ExpertInfo experts[], int count) {
+// ================== Customer Login & Menu ==================
+void customer(ExpertInfo experts[], int count, Booking bookingList[], int& bookingCount) {
     char username[50];
     string password, expectedpw, payment, service;
     const double NAIL_ART_PRICE = 600.00;
     const double PEDI_MANICURE_PRICE = 300.00;
     const double ACRYLIC_PRICE = 750.00;
-    const int MAX_BOOKINGS = 100;
-    Booking bookingList[MAX_BOOKINGS];
-    int bookingCount = 0;
     bool validUsername = false, validPassword = false;
 
     clearInputBuffer(); // Clear leftover newline
@@ -229,8 +222,7 @@ void customer(ExpertInfo experts[], int count) {
             cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
             continue;
         }
-
-        if (password != expectedpw) {
+        else if (password != expectedpw) {
             cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
         }
         else {
@@ -348,7 +340,7 @@ void customer(ExpertInfo experts[], int count) {
                     int serviceChoice, expertIndex;
                     serviceChoice = getValidatedInput(1, 3, "Choose Service");
                     expertIndex = serviceChoice - 1;
-
+                    cout << "\n";
                     ShowExpertSchedule(experts, count, expertIndex);
 
                     do {
@@ -386,7 +378,7 @@ void customer(ExpertInfo experts[], int count) {
                                     case 1:
                                         int subChoice;
                                         do {
-                                            cout << "\nSelect Specific Service:\n";
+                                            cout << "\nSelect Specific Service:" << endl;
                                             cout << "1. Manicure (RM300)\n";
                                             cout << "2. Pedicure (RM300)\n";
                                             cout << "\nSelection: ";
@@ -426,21 +418,22 @@ void customer(ExpertInfo experts[], int count) {
                                         if (paymentchoice2 == 'Y' || paymentchoice2 == 'y') {
                                             system("CLS");
                                             if (processPayment(amount, service)) {
-                                                cout << "[SUCCESS] Payment Confirmed!" << endl;
                                                 experts[serviceChoice].slots[weekChoice][index] = "BOOKED";
                                                 cout << "\n[OK] Booking Confirmed!" << endl;
 
                                                 addBooking(bookingList, bookingCount,
-                                                    getExpertName(serviceChoice),
+                                                    string(username),        // pass logged-in customer name
+                                                    getExpertName(expertIndex),
                                                     service,
                                                     weekChoice + 1,
-													dayChoice,
+                                                    dayChoice,
                                                     slotChoice + 1,
                                                     amount);
 
                                                 cout << "\nPress [ENTER] to return to Customer Menu.....";
 												clearInputBuffer();
                                                 cin.get();
+                                                system("CLS");
                                             }
                                             break;
                                         }

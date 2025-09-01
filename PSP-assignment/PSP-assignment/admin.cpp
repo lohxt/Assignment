@@ -5,18 +5,26 @@
 using namespace std;
 
 void Indi_schedule(ExpertInfo experts[], int count) {
-    int ex;
+    int expertselect;
     cout << "Select an expert:\n";
-    cout << "1. " << experts[0].username << "\n";
-    cout << "2. " << experts[1].username << "\n";
-    cout << "3. " << experts[2].username << "\n";
-    cin >> ex;
+    cout << "1. " << experts[0].username << endl;
+    cout << "2. " << experts[1].username << endl;
+    cout << "3. " << experts[2].username << endl;
 
-    if (ex >= 1 && ex <= 3) {
-        ShowExpertSchedule(experts, count, ex - 1);
-    }
-    else {
-        cout << "Invalid expert selection.\n";
+    while (true) {
+        cout << "\nSelection: ";
+        cin >> expertselect;
+
+        if (expertselect >= 1 && expertselect <= 3) {
+            system("CLS");
+            ShowExpertSchedule(experts, count, expertselect - 1);
+            break;
+        }
+        else if (cin.fail() || (expertselect < 1 || expertselect > 3)){
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "[ERROR] Invalid Expert Selection! Please Select Expert 1-3 Only." << endl;
+        }
     }
 }
 
@@ -36,6 +44,7 @@ void Expert_bonus() {
     cout << "Calculating expert bonus... (Feature pending)\n";
 }
 
+// ================== Admin Login & Menu ==================
 void admin(ExpertInfo experts[], int count) {
     char username[50];
     string password, expectedpw;
@@ -82,8 +91,7 @@ void admin(ExpertInfo experts[], int count) {
             cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
             continue;
         }
-
-        if (password != expectedpw) {
+        else if (password != expectedpw) {
             cout << "\n[ERROR] Wrong Password! Please Try Again." << endl;
         }
         else {
@@ -116,10 +124,20 @@ void admin(ExpertInfo experts[], int count) {
 
         switch (option) {
         case 1:
+            system("CLS");
             Indi_schedule(experts, 3);
+            cout << "\nPress [ENTER] to return to Admin Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
             break;
         case 2:
+            system("CLS");
             Schedule(experts, 3);
+            cout << "\nPress [ENTER] to return to Admin Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
             break;
         case 3:
             Customer_list();

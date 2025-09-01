@@ -46,15 +46,15 @@ string SlotTime(int expertIndex, int t) {
 
 // Show all experts’ schedules
 void ShowAllSchedules(ExpertInfo experts[], int count) {
-    cout << "\n===== General December Schedule =====\n"; 
+    cout << "===== General December Schedule =====\n"; 
     // Add session notes
     cout << "\n[NOTE] Slot durations by service:\n";
 	cout << "All services are 3 hours per session: 9am-12pm, 12pm-3pm\n";
 
     for (int w = 0; w < WEEKS; w++) {
-        cout << "\n----------- Week " << (w + 1) << " -----------\n"; 
+        cout << "\n" << string(23, '=') << " Week " << (w + 1) << " " << string(24, '=') << endl;
         for (int d = 0; d < DAYS; d++) {
-            cout << "\n" << dayNames[d] << ":\n"; // Header row 
+            cout << dayNames[d] << ":\n"; // Header row 
             cout << left << setw(10) << "Time"; 
             for (int e = 0; e < count; e++) {
                 cout << setw(15) << experts[e].username;
@@ -77,10 +77,10 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
 
 // ===== Show one expert’s schedule in a table format =====
 void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
-    cout << "\n===== Schedule for " << experts[expertIndex].username << " =====\n";
+    cout << "===== Schedule for " << experts[expertIndex].username << " =====" << endl;
 
     for (int w = 0; w < WEEKS; w++) {
-        cout << "\n" << string(42, '=') << " Week " << (w + 1) << " " << string(42, '=') << endl;
+        cout << "\n" << string(32, '=') << " Week " << (w + 1) << " " << string(32, '=') << endl;
 
         // Header row: days
         cout << left << setw(12) << "Time";
@@ -104,16 +104,40 @@ void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
     }
 }
 
+void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& expertName) {
+    cout << string(10, '=') << " Customers of " << expertName << " " << string(10, '=') << endl;
+
+    int count = 0;
+    for (int i = 0; i < bookingCount; i++) {
+        if (bookingList[i].expertName == expertName) {
+            count++;
+            cout << "\nCustomer: " << bookingList[i].customerName << endl;
+            cout << "Service : " << bookingList[i].service << endl;
+            cout << "Week    : " << bookingList[i].week << endl;
+            cout << "Day     : " << dayNames[bookingList[i].day] << endl;
+            cout << "Slot    : " << bookingList[i].slot << endl;
+            cout << "Duration: 3 Hours" << endl;
+            cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
+            cout << string(40, '-') << endl;
+        }
+    }
+
+    if (count == 0) {
+        cout << "[OOPS] No Customers Assigned Yet.\n";
+    }
+}
+
 // ================== Expert Login & Menu ==================
-void Expert(ExpertInfo experts[], int count) {
+void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     string username, password;
+    int loggedExpert = -1, hoursWorked;
+    double bonus, totalCharges, bonusEarned;
+    double SERVICE_CHARGE = 100.00;
+    bool loggedIn = false;
 
     clearInputBuffer();
 
     cout << "===== CHROMANAILS STUDIO EXPERT MENU =====\n";
-
-    int loggedExpert = -1;
-    bool loggedIn = false;
     // ===== Login Loop =====
     do {
         cout << "Enter Username: ";
@@ -191,16 +215,49 @@ void Expert(ExpertInfo experts[], int count) {
 
         switch (option) {
             case 1: 
+                system("CLS");
                 ShowExpertSchedule(experts, count, loggedExpert);
                 cout << "\nPress [ENTER] to return to Expert Menu.....";
                 clearInputBuffer();
+                cin.get();
                 system("CLS");
                 break;
             case 2: 
-                cout << "[TODO] View Assigned Customer List\n"; 
+                system("CLS");
+                ShowExpertCustomers(bookingList, bookingCount, experts[loggedExpert].username);
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                clearInputBuffer();
+                cin.get();
+                system("CLS");
                 break;
             case 3: 
-                cout << "[TODO] View Earnings Bonus Entitlement\n"; 
+                system("CLS");
+                cout << "Enter Hours Worked: ";
+                cin >> hoursWorked;
+
+                if (hoursWorked < 25) {
+                    bonus = 0.0;
+                }
+                else if (hoursWorked < 30) {
+                    bonus = 0.25;
+                }
+                else if (hoursWorked >= 30) {
+                    bonus = 0.5;
+                }
+                system("CLS");
+                totalCharges = SERVICE_CHARGE * hoursWorked / 3;
+                bonusEarned = totalCharges * bonus;
+                cout << "Expert " << username << " Bonus Report - December" << endl;
+                cout << "-------------------------------------------------" << endl;
+                cout << "Total Hours Worked    : " << hoursWorked << " hrs" << endl;
+                cout << fixed << setprecision(2);
+                cout << "Total Service Charges : RM" << totalCharges << endl;
+                cout << "Bonus Percentage      : " << bonus * 100 << "%" << endl;
+                cout << "Bonus Earned          : RM" << bonusEarned << endl;
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                clearInputBuffer();
+                cin.get();
+                system("CLS");
                 break;
             case 4: 
                 exitMenu = true; 
