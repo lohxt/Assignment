@@ -199,21 +199,82 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
     do {
         cout << "Welcome, Expert " << experts[loggedExpert].username << "!" << endl;
         cout << "What would you like to do today?" << endl;
-        cout << "1. View Individual Schedule\n";    
-        cout << "2. View Assigned Customer List\n";
-        cout << "3. View Earnings Bonus Entitlement\n";
-        cout << "4. Exit to Main Menu\n\n";
+        cout << "1. View Individual Schedule" << endl ;    
+        cout << "2. View Assigned Customer List" << endl;
+        cout << "3. View Earnings Bonus Entitlement" << endl;
+        cout << "4. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
+        cin >> option;
 
-        if (!(cin >> option)) {
+        while ((option < 1 || option > 4) || cin.fail()) {
             cin.clear();
-			clearInputBuffer();
-            cout << "\n[ERROR] Invalid input. Please enter a number.\n";
-            continue;
+            cin.ignore(1000, '\n');
+            cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
+            cout << "\nSelection: ";
+            cin >> option;
         }
-        clearInputBuffer(); // clean newline after numeric input
 
         switch (option) {
+<<<<<<< HEAD
+        case 1: 
+            system("CLS");
+            ShowExpertSchedule(experts, count, loggedExpert);
+            cout << "\nPress [ENTER] to return to Expert Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 2: 
+            system("CLS");
+            ShowExpertCustomers(bookingList, bookingCount, experts[loggedExpert].username);
+            cout << "\nPress [ENTER] to return to Expert Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 3: 
+            system("CLS");
+            cout << "Enter Hours Worked: ";
+            cin >> hoursWorked;
+
+            while (hoursWorked <= 0 || cin.fail()) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "[ERROR] Invalid Input! Please Try Again." << "\n" << endl;
+                cout << "Enter Hours Worked: ";
+                cin >> hoursWorked;
+            }
+            
+            if (hoursWorked < 25) {
+                bonus = 0.0;
+            }
+            else if (hoursWorked < 30) {
+                bonus = 0.25;
+            }
+            else if (hoursWorked >= 30) {
+                bonus = 0.5;
+            }
+
+            system("CLS");
+            totalCharges = SERVICE_CHARGE * hoursWorked / 3;
+            bonusEarned = totalCharges * bonus;
+            cout << "Expert " << username << " Bonus Report - December" << endl;
+            cout << "-------------------------------------------------" << endl;
+            cout << "Total Hours Worked    : " << hoursWorked << " hrs" << endl;
+            cout << fixed << setprecision(2);
+            cout << "Total Service Charges : RM" << totalCharges << endl;
+            cout << "Bonus Percentage      : " << bonus * 100 << "%" << endl;
+            cout << "Bonus Earned          : RM" << bonusEarned << endl;
+            cout << "\nPress [ENTER] to return to Expert Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 4: 
+            exitMenu = true; 
+            system("CLS");
+            break;
+=======
             case 1: 
                 system("CLS");
                 ShowExpertSchedule(experts, count, loggedExpert);
@@ -266,6 +327,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             default: 
                 cout << "[ERROR] Invalid Selection!\n";
                 break;
+>>>>>>> 3fec4cc1515dd6bf4913a686e7a306a9992b4f49
         }
     } while (!exitMenu);
 }

@@ -109,18 +109,26 @@ void admin(ExpertInfo experts[], int count) {
     int option;
     bool exitMenu = false;
 
-    // Menu loop
-    while (!exitMenu) {
+    // ===== Admin Menu =====
+    do {
         cout << "Welcome, Admin " << username << "!" << endl;
         cout << "What do you want to look at?" << endl;
-        cout << "1. Individual Expert Schedule\n"
-            << "2. Overall Schedule\n"
-            << "3. Customer List\n"
-            << "4. Generate Sales Reports\n"
-            << "5. Expert Bonus Entitlements\n"
-            << "6. Exit to Main Menu\n" << endl;
+        cout << "1. View Individual Expert Schedule" << endl;
+        cout << "2. View Overall Schedule" << endl;
+        cout << "3. View Customer List" << endl;
+        cout << "4. View Generate Sales Reports" << endl;
+        cout << "5. View Expert Bonus Entitlements" << endl;
+        cout << "6. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
         cin >> option;
+
+        while ((option < 1 || option > 6) || cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
+            cout << "\nSelection: ";
+            cin >> option;
+        }
 
         switch (option) {
         case 1:
@@ -152,9 +160,6 @@ void admin(ExpertInfo experts[], int count) {
             exitMenu = true;
             system("CLS");
             break;
-        default:
-            cout << "[ERROR] Invalid Selection!\n";
-            break;
         }
-    } 
+    } while (!exitMenu);
 }
