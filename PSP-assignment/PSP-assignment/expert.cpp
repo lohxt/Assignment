@@ -61,7 +61,11 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
             } 
             cout << "\n" << string(10 + 15 * 3, '-') << "\n"; // Slot rows 
     
+<<<<<<< Updated upstream
             for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9amâ€“3pm
+=======
+            for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9am–3pm
+>>>>>>> Stashed changes
                 int index = d * SLOTS_PER_DAY + t;
                 string timeLabel = (t == 0) ? "9am-12pm" : "12pm-3pm";    // prints 3-hour ranges
                 cout << left << setw(10) << timeLabel;
@@ -215,6 +219,13 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
         }
 
         switch (option) {
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
+>>>>>>> Stashed changes
         case 1: 
             system("CLS");
             ShowExpertSchedule(experts, count, loggedExpert);
@@ -273,6 +284,66 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             exitMenu = true; 
             system("CLS");
             break;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+=======
+=======
+            case 1: 
+                system("CLS");
+                ShowExpertSchedule(experts, count, loggedExpert);
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                clearInputBuffer();
+                cin.get();
+                system("CLS");
+                break;
+            case 2: 
+                system("CLS");
+                ShowExpertCustomers(bookingList, bookingCount, experts[loggedExpert].username);
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                clearInputBuffer();
+                cin.get();
+                system("CLS");
+                break;
+            case 3: 
+                system("CLS");
+                cout << "Enter Hours Worked: ";
+                cin >> hoursWorked;
+
+                if (hoursWorked < 25) {
+                    bonus = 0.0;
+                }
+                else if (hoursWorked < 30) {
+                    bonus = 0.25;
+                }
+                else if (hoursWorked >= 30) {
+                    bonus = 0.5;
+                }
+                system("CLS");
+                totalCharges = SERVICE_CHARGE * hoursWorked / 3;
+                bonusEarned = totalCharges * bonus;
+                cout << "Expert " << username << " Bonus Report - December" << endl;
+                cout << "-------------------------------------------------" << endl;
+                cout << "Total Hours Worked    : " << hoursWorked << " hrs" << endl;
+                cout << fixed << setprecision(2);
+                cout << "Total Service Charges : RM" << totalCharges << endl;
+                cout << "Bonus Percentage      : " << bonus * 100 << "%" << endl;
+                cout << "Bonus Earned          : RM" << bonusEarned << endl;
+                cout << "\nPress [ENTER] to return to Expert Menu.....";
+                clearInputBuffer();
+                cin.get();
+                system("CLS");
+                break;
+            case 4: 
+                exitMenu = true; 
+                system("CLS");
+                break;
+            default: 
+                cout << "[ERROR] Invalid Selection!\n";
+                break;
+>>>>>>> 3fec4cc1515dd6bf4913a686e7a306a9992b4f49
+>>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
+>>>>>>> Stashed changes
         }
     } while (!exitMenu);
 }
