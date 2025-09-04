@@ -5,7 +5,7 @@
 #include "mainheader.h"
 using namespace std;
 
-string dayNames[DAYS] = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 
 // ================== Helper Functions ==================
 
@@ -35,7 +35,7 @@ string SlotTime(int expertIndex, int t) {
         return to_string(displayHour) + ampm + "-" + to_string(displayHour + 1) + ampm;
     }
     else {
-		// Experts 1 & 3 -> Nail Art/Acrylic = 3 hr slots
+        // Experts 1 & 3 -> Nail Art/Acrylic = 3 hr slots
         if (t == 0) return "9am-12pm";
         if (t == 3) return "12pm-3pm";
         return "";
@@ -44,31 +44,24 @@ string SlotTime(int expertIndex, int t) {
 
 // ================== Schedule Display ==================
 
-// Show all expertsâ€™ schedules
+// Show all experts’ schedules
 void ShowAllSchedules(ExpertInfo experts[], int count) {
-    cout << "===== General December Schedule =====\n"; 
+    cout << "===== General December Schedule =====\n";
     // Add session notes
     cout << "\n[NOTE] Slot durations by service:\n";
-	cout << "All services are 3 hours per session: 9am-12pm, 12pm-3pm\n";
+    cout << "All services are 3 hours per session: 9am-12pm, 12pm-3pm\n";
 
     for (int w = 0; w < WEEKS; w++) {
         cout << "\n" << string(23, '=') << " Week " << (w + 1) << " " << string(24, '=') << endl;
         for (int d = 0; d < DAYS; d++) {
             cout << dayNames[d] << ":\n"; // Header row 
-            cout << left << setw(10) << "Time"; 
+            cout << left << setw(10) << "Time";
             for (int e = 0; e < count; e++) {
                 cout << setw(15) << experts[e].username;
-            } 
+            }
             cout << "\n" << string(10 + 15 * 3, '-') << "\n"; // Slot rows 
-    
-<<<<<<< Updated upstream
-            for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9amâ€“3pm
-=======
+
             for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9am–3pm
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
                 int index = d * SLOTS_PER_DAY + t;
                 string timeLabel = (t == 0) ? "9am-12pm" : "12pm-3pm";    // prints 3-hour ranges
                 cout << left << setw(10) << timeLabel;
@@ -78,11 +71,11 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
                 }
                 cout << "\n";
             }
-        } 
-    } 
+        }
+    }
 }
 
-// ===== Show one expertâ€™s schedule in a table format =====
+// ===== Show one expert’s schedule in a table format =====
 void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
     cout << "===== Schedule for " << experts[expertIndex].username << " =====" << endl;
 
@@ -102,7 +95,7 @@ void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
 
             cout << left << setw(12) << timeLabel;
             for (int d = 0; d < DAYS; d++) {
-                int index = d * SLOTS_PER_DAY + t ;
+                int index = d * SLOTS_PER_DAY + t;
                 cout << setw(12) << experts[expertIndex].slots[w][index];
             }
             cout << "\n";
@@ -206,7 +199,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
     do {
         cout << "Welcome, Expert " << experts[loggedExpert].username << "!" << endl;
         cout << "What would you like to do today?" << endl;
-        cout << "1. View Individual Schedule" << endl ;    
+        cout << "1. View Individual Schedule" << endl;
         cout << "2. View Assigned Customer List" << endl;
         cout << "3. View Earnings Bonus Entitlement" << endl;
         cout << "4. Exit to Main Menu\n" << endl;
@@ -222,20 +215,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
         }
 
         switch (option) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        case 1: 
+        case 1:
             system("CLS");
             ShowExpertSchedule(experts, count, loggedExpert);
             cout << "\nPress [ENTER] to return to Expert Menu.....";
@@ -243,7 +223,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             cin.get();
             system("CLS");
             break;
-        case 2: 
+        case 2:
             system("CLS");
             ShowExpertCustomers(bookingList, bookingCount, experts[loggedExpert].username);
             cout << "\nPress [ENTER] to return to Expert Menu.....";
@@ -251,7 +231,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             cin.get();
             system("CLS");
             break;
-        case 3: 
+        case 3:
             system("CLS");
             cout << "Enter Hours Worked: ";
             cin >> hoursWorked;
@@ -263,7 +243,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
                 cout << "Enter Hours Worked: ";
                 cin >> hoursWorked;
             }
-            
+
             if (hoursWorked < 25) {
                 bonus = 0.0;
             }
@@ -289,76 +269,10 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             cin.get();
             system("CLS");
             break;
-        case 4: 
-            exitMenu = true; 
+        case 4:
+            exitMenu = true;
             system("CLS");
             break;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-<<<<<<< HEAD
-=======
-=======
-            case 1: 
-                system("CLS");
-                ShowExpertSchedule(experts, count, loggedExpert);
-                cout << "\nPress [ENTER] to return to Expert Menu.....";
-                clearInputBuffer();
-                cin.get();
-                system("CLS");
-                break;
-            case 2: 
-                system("CLS");
-                ShowExpertCustomers(bookingList, bookingCount, experts[loggedExpert].username);
-                cout << "\nPress [ENTER] to return to Expert Menu.....";
-                clearInputBuffer();
-                cin.get();
-                system("CLS");
-                break;
-            case 3: 
-                system("CLS");
-                cout << "Enter Hours Worked: ";
-                cin >> hoursWorked;
-
-                if (hoursWorked < 25) {
-                    bonus = 0.0;
-                }
-                else if (hoursWorked < 30) {
-                    bonus = 0.25;
-                }
-                else if (hoursWorked >= 30) {
-                    bonus = 0.5;
-                }
-                system("CLS");
-                totalCharges = SERVICE_CHARGE * hoursWorked / 3;
-                bonusEarned = totalCharges * bonus;
-                cout << "Expert " << username << " Bonus Report - December" << endl;
-                cout << "-------------------------------------------------" << endl;
-                cout << "Total Hours Worked    : " << hoursWorked << " hrs" << endl;
-                cout << fixed << setprecision(2);
-                cout << "Total Service Charges : RM" << totalCharges << endl;
-                cout << "Bonus Percentage      : " << bonus * 100 << "%" << endl;
-                cout << "Bonus Earned          : RM" << bonusEarned << endl;
-                cout << "\nPress [ENTER] to return to Expert Menu.....";
-                clearInputBuffer();
-                cin.get();
-                system("CLS");
-                break;
-            case 4: 
-                exitMenu = true; 
-                system("CLS");
-                break;
-            default: 
-                cout << "[ERROR] Invalid Selection!\n";
-                break;
->>>>>>> 3fec4cc1515dd6bf4913a686e7a306a9992b4f49
->>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         }
     } while (!exitMenu);
 }
