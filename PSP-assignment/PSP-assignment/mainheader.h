@@ -5,7 +5,7 @@ using namespace std;
 // ===== Calendar settings =====
 const int WEEKS = 4;
 const int DAYS = 5;
-const int SLOTS_PER_DAY = 6; // 2 sessions per day, 3 hours each (9am-12pm, 12pm-3pm)
+const int SLOTS_PER_DAY = 2; // 2 sessions per day, 3 hours each (9am-12pm, 12pm-3pm)
 const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 30 slots per week
 const int MAX_BOOKINGS = 100;
 
