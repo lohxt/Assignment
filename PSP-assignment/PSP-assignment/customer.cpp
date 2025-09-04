@@ -154,22 +154,28 @@ void addBooking(Booking bookingList[], int& bookingCount,
     }
 }
 
-void showBookings(Booking bookingList[], int bookingCount) {
+void showBookings(Booking bookingList[], int bookingCount, const string& currentUser) {
     cout << string(14, '=') << " My Bookings " << string(14, '=') << endl;
-    if (bookingCount == 0) {
-        cout << "No bookings found." << endl;
-        return;
-    }
+
+	bool found = false;
 
     for (int i = 0; i < bookingCount; i++) {
-        cout << "\nBooking #" << i + 1 << endl;
-        cout << "Expert  : " << bookingList[i].expertName << endl;
-        cout << "Service : " << bookingList[i].service << endl;
-        cout << "Week    : " << bookingList[i].week << endl;
-		cout << "Day     : " << daynames[bookingList[i].day] << endl;
-        cout << "Slot    : " << bookingList[i].slot << endl;
-        cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
-        cout << string(41, '-') << endl;
+        if (bookingList[i].customerName == currentUser)
+        {
+            found = true;
+            cout << "\nBooking #" << i + 1 << endl;
+            cout << "Expert  : " << bookingList[i].expertName << endl;
+            cout << "Service : " << bookingList[i].service << endl;
+            cout << "Week    : " << bookingList[i].week << endl;
+		    cout << "Day     : " << daynames[bookingList[i].day] << endl;
+            cout << "Slot    : " << bookingList[i].slot << endl;
+            cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
+            cout << string(41, '-') << endl;
+        }
+    }
+    if (!found)
+    {
+		cout << "No bookings found for " << currentUser << ".\n";
     }
 }
 
@@ -485,7 +491,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             break;
         case 3:
             system("CLS");
-            showBookings(bookingList, bookingCount);
+            showBookings(bookingList, bookingCount, string(username));
 
             cout << "\nPress [ENTER] to return to Customer Menu.....";
             clearInputBuffer();

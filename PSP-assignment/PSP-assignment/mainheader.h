@@ -27,10 +27,10 @@ struct ExpertInfo {
 };
 
 // ===== Admin functions =====
-void admin(ExpertInfo experts[], int count);
+void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
 void Indi_schedule(ExpertInfo experts[], int count);
 void Schedule(ExpertInfo experts[], int count);
-void Customer_list();
+void Customer_list(Booking bookingList[], int bookingCount);
 void Generate_sales_rpt();
 void Expert_bonus();
 

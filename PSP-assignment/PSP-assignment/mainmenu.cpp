@@ -45,7 +45,7 @@ int main() {
         switch (role) {
         case 1:
             cout << "\n";
-            admin(experts, 3);
+            admin(experts, 3, bookingList, bookingCount);
             break;
         case 2:
             cout << "\n";

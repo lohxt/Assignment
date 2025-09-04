@@ -32,8 +32,25 @@ void Schedule(ExpertInfo experts[], int count) {
     ShowAllSchedules(experts, count);
 }
 
-void Customer_list() {
-    cout << "Displaying customer list... (Feature pending)\n";
+void Customer_list(Booking bookingList[], int bookingCount) {
+	string dayNames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
+    cout << "===== All Customer Bookings =====\n";
+    if (bookingCount == 0)
+    {
+		cout << "No Customers have booked yet.\n";
+        return;
+    }
+    for (int i = 0; i < bookingCount; i++)
+    {
+		cout << "Customer: " << bookingList[i].customerName << endl;
+		cout << "Service : " << bookingList[i].service << endl;
+		cout << "Expert  : " << bookingList[i].expertName << endl;
+		cout << "Week    : " << bookingList[i].week << endl;
+		cout << "Day     : " << dayNames[bookingList[i].day] << endl;
+		cout << "Slot    : " << bookingList[i].slot << endl;
+        cout<<"Amount  : RM"<< bookingList[i].amount << " + RM100 (Service Charge)"<< endl;
+		cout << string(40, '-') << endl;
+    }
 }
 
 void Generate_sales_rpt() {
@@ -45,7 +62,7 @@ void Expert_bonus() {
 }
 
 // ================== Admin Login & Menu ==================
-void admin(ExpertInfo experts[], int count) {
+void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     char username[50];
     string password, expectedpw;
     bool validUsername = false, validPassword = false;
@@ -148,7 +165,12 @@ void admin(ExpertInfo experts[], int count) {
             system("CLS");
             break;
         case 3:
-            Customer_list();
+			system("CLS");
+            Customer_list(bookingList, bookingCount);
+			cout << "\nPress [ENTER] to return to Admin Menu.....";
+			clearInputBuffer();
+			cin.get();
+			system("CLS");
             break;
         case 4:
             Generate_sales_rpt();
