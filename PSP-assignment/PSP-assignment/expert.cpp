@@ -65,6 +65,9 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
             for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9amâ€“3pm
 =======
             for (int t = 0; t < 2; t++) {  // only slots 0..5 = 9am–3pm
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 int index = d * SLOTS_PER_DAY + t;
                 string timeLabel = (t == 0) ? "9am-12pm" : "12pm-3pm";    // prints 3-hour ranges
@@ -220,11 +223,17 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
 
         switch (option) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         case 1: 
             system("CLS");
@@ -285,7 +294,10 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             system("CLS");
             break;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
 =======
 =======
@@ -343,6 +355,9 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
                 break;
 >>>>>>> 3fec4cc1515dd6bf4913a686e7a306a9992b4f49
 >>>>>>> 7e7e6d76bf8b56657210afbbbced58da3ec84bfa
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         }
     } while (!exitMenu);
