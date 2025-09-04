@@ -160,14 +160,14 @@ void showBookings(Booking bookingList[], int bookingCount, const string& current
 	bool found = false;
 
     for (int i = 0; i < bookingCount; i++) {
-        if (bookingList[i].customerName == currentUser)
+        if (bookingList[i].customerName == currentUser) //only show bookings of the logged in customer
         {
             found = true;
             cout << "\nBooking #" << i + 1 << endl;
             cout << "Expert  : " << bookingList[i].expertName << endl;
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
-		    cout << "Day     : " << daynames[bookingList[i].day] << endl;
+		    cout << "Day     : " << daynames[bookingList[i].day] << endl;   
             cout << "Slot    : " << bookingList[i].slot << endl;
             cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
             cout << string(41, '-') << endl;
