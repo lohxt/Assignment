@@ -67,7 +67,6 @@ bool processPayment(double amount, string service) {
 
     // Validate Expiry Date
 while (true) {
-    string expiry;
     cout << "Enter Expiry Date (MM/YY): ";
     cin >> expiry;
 
@@ -181,7 +180,7 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Expert  : " << bookingList[i].expertName << endl;
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
-            cout << "Day     : " << daynames[bookingList[i].day] << endl;
+            cout << "Day     : " << daynNames[bookingList[i].day] << endl;
             cout << "Slot    : " << bookingList[i].slot << endl;
             cout << fixed << setprecision(2);
             cout << "Amount  : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;
