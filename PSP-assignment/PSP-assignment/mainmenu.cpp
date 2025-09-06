@@ -23,10 +23,10 @@ int main() {
         cout << "===== CHROMANAILS STUDIO BOOKING SYSTEM =====\n" << endl;
         cout << "WELCOME TO CHROMANAILS STUDIO'S BOOKING SYSTEM!" << endl;
         cout << "Please select the following options below:\n" << endl;
-        cout << "If you are an Admin, choose 1\n"
-            << "If you are an Expert, choose 2\n"
-            << "If you are a Customer, choose 3\n"
-            << "To exit the program, choose 4\n" << endl;
+        cout << "If you are an Admin, Choose 1\n"
+            << "If you are an Expert, Choose 2\n"
+            << "If you are a Customer, Choose 3\n"
+            << "To exit the program, Choose 4\n" << endl;
         cout << "1. Admin" << endl;
         cout << "2. Expert" << endl;
         cout << "3. Customer" << endl;
