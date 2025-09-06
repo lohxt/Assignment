@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <cctype>
+#include <fstream>
 #include "mainheader.h"
 using namespace std;
 
@@ -11,6 +12,31 @@ void clearInputBuffer() {
         // Just discard characters, it helps such that username and password don't get stuck together
     }
 }
+
+void customerfeedback(const string& customername) {
+    string feedback;
+    char choice;
+    
+    cout << "==== Feedback Form ====\n"
+        << "We value your feedback, " << customername << "! Let us know if there is any improvements we can make.\n";
+    clearInputBuffer();
+
+    cout << "Please enter your feedback about our service: \n";
+    getline(cin, feedback);
+
+    ofstream fbfile("feedback.txt");
+    if (!fbfile)
+    {
+        cout << "[ERROR] Unable to open feedback file.";
+        return;
+    }
+    fbfile << "Customer : " << customername << endl;
+    fbfile << "Feedback : \n" << feedback << endl;
+    fbfile << "------------------------------------------";
+    fbfile.close();
+
+    cout << "\nThank you for you feedback, we apprieciate your opinion.\n";
+};
 
 int getValidatedInput(int min, int max, const string& prompt) {
     int input;
@@ -359,11 +385,12 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
         cout << "1. View Information About ChromaNails Studio" << endl;
         cout << "2. View Services & Experts" << endl;
         cout << "3. View My Bookings" << endl;
-        cout << "4. Exit to Main Menu\n" << endl;
+        cout << "4. Submit Feedback" << endl;
+        cout << "5. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
         cin >> option;
 
-        while ((option < 1 || option > 4) || cin.fail()) {
+        while ((option < 1 || option > 5) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
@@ -372,7 +399,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
         }
 
         switch (option) {
-        case 1:
+        case 1: {
             system("CLS");
             cout << string(80, '=') << endl;
             cout << right << setw(58) << "CHROMANAILS STUDIO - NAIL CARE & ART" << endl;
@@ -423,7 +450,8 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             cin.get();
             system("CLS");
             break;
-        case 2:
+        }
+        case 2: {
             system("CLS");
             cout << "Service: Nail Care & Art\n" << endl;
             cout << "Expert 1: JOSHUA LOKE" << endl;
@@ -591,6 +619,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                 break;
             } while (true);
             break;
+        }
         case 3:
             system("CLS");
             showBookings(experts, count, bookingList, bookingCount, string(username));
@@ -600,6 +629,13 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             system("CLS");
             break;
         case 4:
+            system("CLS");
+            customerfeedback(string(username));
+            cout << "Press [ENTER] to return to customer menu.....";
+            cin.get();
+            system("CLS");
+            break;
+        case 5:
             exitMenu = true; // Leave customer menu
             system("CLS");
             break;
