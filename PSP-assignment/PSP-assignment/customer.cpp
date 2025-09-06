@@ -4,7 +4,7 @@
 #include <cctype>
 #include "mainheader.h"
 using namespace std;
-const char* daynames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
+string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 
 void clearInputBuffer() {
     char c;
