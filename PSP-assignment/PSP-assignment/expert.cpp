@@ -52,9 +52,9 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
     cout << "All services are 3 hours per session: 9am-12pm, 12pm-3pm\n";
 
     for (int w = 0; w < WEEKS; w++) {
-        cout << "\n" << string(23, '=') << " Week " << (w + 1) << " " << string(24, '=') << endl;
+        cout << "\n" << string(23, '=') << " Week " << (w + 1) << " " << string(24, '=');
         for (int d = 0; d < DAYS; d++) {
-            cout << dayNames[d] << ":\n"; // Header row 
+            cout << "\n" << dayNames[d] << ":" << endl; // Header row 
             cout << left << setw(10) << "Time";
             for (int e = 0; e < count; e++) {
                 cout << setw(15) << experts[e].username;
@@ -105,20 +105,21 @@ void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
 }
 
 void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& expertName) {
-    cout << string(10, '=') << " Customers of " << expertName << " " << string(10, '=') << endl;
+    cout << string(10, '=') << " Customers of " << expertName << " " << string(10, '=') << "\n" << endl;
 
     int count = 0;
     for (int i = 0; i < bookingCount; i++) {
         if (bookingList[i].expertName == expertName) {
             count++;
-            cout << "\nCustomer: " << bookingList[i].customerName << endl;
-            cout << "Service : " << bookingList[i].service << endl;
-            cout << "Week    : " << bookingList[i].week << endl;
-            cout << "Day     : " << dayNames[bookingList[i].day] << endl;
-            cout << "Slot    : " << bookingList[i].slot << endl;
-            cout << "Duration: 3 Hours" << endl;
-            cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
-            cout << string(40, '-') << endl;
+            cout << "Customer : " << bookingList[i].customerName << endl;
+            cout << "Service  : " << bookingList[i].service << endl;
+            cout << "Week     : " << bookingList[i].week << endl;
+            cout << "Day      : " << dayNames[bookingList[i].day] << endl;
+            cout << "Slot     : " << bookingList[i].slot << endl;
+            cout << "Duration : 3 Hours" << endl;
+            cout << fixed << setprecision(2);
+            cout << "Amount   : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;
+            cout << string(48, '-') << endl;
         }
     }
 
@@ -127,12 +128,51 @@ void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& 
     }
 }
 
+void ShowExpertBonus(string username, int count, Booking bookingList[], int bookingCount) {
+    int hoursWorked = 0;
+    double totalCharges = 0.0;
+    double bonusRate = 0.0;
+    double bonusEarned = 0.0;
+    double SERVICE_CHARGE = 100.00;
+
+    if (bookingCount == 0) {
+        cout << "No Bookings Available. Cannot Calculate Bonuses.\n";
+        return;
+    }
+
+    // Go through bookings to accumulate hours & value
+    for (int i = 0; i < bookingCount; i++) {
+        if (bookingList[i].expertName == username) {
+            hoursWorked += 3; // Each slot is 3 hours
+        }
+    }
+
+    if (hoursWorked < 25) {
+        bonusRate = 0.0;
+    }
+    else if (hoursWorked < 30) {
+        bonusRate = 0.25;
+    }
+    else if (hoursWorked >= 30) {
+        bonusRate = 0.5;
+    }
+
+    system("CLS");
+    totalCharges = SERVICE_CHARGE * hoursWorked / 3;
+    bonusEarned = totalCharges * bonusRate;
+    cout << "Expert " << username << " Bonus Report - December" << endl;
+    cout << "-------------------------------------------------" << endl;
+    cout << "Total Hours Worked     : " << hoursWorked << " hrs" << endl;
+    cout << fixed << setprecision(2);
+    cout << "Total Service Charges  : RM" << totalCharges << endl;
+    cout << "Bonus Percentage       : " << bonusRate * 100 << "%" << endl;
+    cout << "Bonus Earned           : RM" << bonusEarned << endl;
+}
+
 // ================== Expert Login & Menu ==================
 void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     string username, password;
     int loggedExpert = -1, hoursWorked;
-    double bonus, totalCharges, bonusEarned;
-    double SERVICE_CHARGE = 100.00;
     bool loggedIn = false;
 
     clearInputBuffer();
@@ -233,37 +273,7 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             break;
         case 3:
             system("CLS");
-            cout << "Enter Hours Worked: ";
-            cin >> hoursWorked;
-
-            while (hoursWorked <= 0 || cin.fail()) {
-                cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "[ERROR] Invalid Input! Please Try Again." << "\n" << endl;
-                cout << "Enter Hours Worked: ";
-                cin >> hoursWorked;
-            }
-
-            if (hoursWorked < 25) {
-                bonus = 0.0;
-            }
-            else if (hoursWorked < 30) {
-                bonus = 0.25;
-            }
-            else if (hoursWorked >= 30) {
-                bonus = 0.5;
-            }
-
-            system("CLS");
-            totalCharges = SERVICE_CHARGE * hoursWorked / 3;
-            bonusEarned = totalCharges * bonus;
-            cout << "Expert " << username << " Bonus Report - December" << endl;
-            cout << "-------------------------------------------------" << endl;
-            cout << "Total Hours Worked    : " << hoursWorked << " hrs" << endl;
-            cout << fixed << setprecision(2);
-            cout << "Total Service Charges : RM" << totalCharges << endl;
-            cout << "Bonus Percentage      : " << bonus * 100 << "%" << endl;
-            cout << "Bonus Earned          : RM" << bonusEarned << endl;
+            ShowExpertBonus(username, count, bookingList, bookingCount);
             cout << "\nPress [ENTER] to return to Expert Menu.....";
             clearInputBuffer();
             cin.get();

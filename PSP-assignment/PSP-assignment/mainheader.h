@@ -31,8 +31,7 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
 void Indi_schedule(ExpertInfo experts[], int count);
 void Schedule(ExpertInfo experts[], int count);
 void Customer_list(Booking bookingList[], int bookingCount);
-void Generate_sales_rpt();
-void Expert_bonus();
+void Expert_bonus(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
 
 // ===== Expert functions =====
 void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
@@ -40,6 +39,7 @@ void InitSchedules(ExpertInfo experts[], int count);
 void ShowAllSchedules(ExpertInfo experts[], int count);
 void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex);
 void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& expertName);
+void ShowExpertBonus(string username, int count, Booking bookingList[], int bookingCount);
 
 // ===== Customer functions =====
 void customer(ExpertInfo experts[], int count, Booking bookingList[], int& bookingCount);
