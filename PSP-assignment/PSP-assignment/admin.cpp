@@ -38,6 +38,10 @@ void Customer_list(Booking bookingList[], int bookingCount) {
 =======
 	string dayNames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+>>>>>>> Stashed changes
 =======
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 >>>>>>> Stashed changes
@@ -54,13 +58,19 @@ void Customer_list(Booking bookingList[], int bookingCount) {
 		cout << "Expert   : " << bookingList[i].expertName << endl;
 		cout << "Week     : " << bookingList[i].week << endl;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		cout << "Day      : " << dayNames[bookingList[i].day] << endl;
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
 		cout << "Day      : " << getDayName((Day)bookingList[i].day) << endl;
 =======
 		cout << "Day      : " << dayNames[bookingList[i].day] << endl;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 		cout << "Slot     : " << bookingList[i].slot << endl;
         cout << fixed << setprecision(2);

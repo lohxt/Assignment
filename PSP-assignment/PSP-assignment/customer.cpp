@@ -5,12 +5,18 @@
 #include "mainheader.h"
 using namespace std;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
 =======
 string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 void clearInputBuffer() {
@@ -78,7 +84,10 @@ while (true) {
     cin >> expiry;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
         if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
             expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
@@ -92,6 +101,9 @@ while (true) {
             else {
                 cout << "[ERROR] Invalid Month in Expiry Date! Month must be between 01-12.\n" << endl;
             }
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
@@ -206,13 +218,19 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             cout << "Day     : " << daynNames[bookingList[i].day] << endl;
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
             cout << "Day     : " << getDayName(bookingList[i].day) << endl;
 =======
             cout << "Day     : " << daynNames[bookingList[i].day] << endl;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             cout << "Slot    : " << bookingList[i].slot << endl;
             cout << fixed << setprecision(2);
@@ -249,13 +267,19 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                     // Free old slot first
                     int oldWeek = bookingList[bookingIndex].week - 1;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     int oldDay = bookingList[bookingIndex].day;
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
                     int oldDay = (int)bookingList[bookingIndex].day;
 =======
                     int oldDay = bookingList[bookingIndex].day;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     int oldSlot = bookingList[bookingIndex].slot - 1;
                     int oldIndex = oldDay * SLOTS_PER_DAY + oldSlot;
@@ -285,13 +309,19 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                                         // Update booking
                                         bookingList[bookingIndex].week = newWeek + 1;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                         bookingList[bookingIndex].day = newDay;
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
                                         bookingList[bookingIndex].day = (Day)newDay;
 =======
                                         bookingList[bookingIndex].day = newDay;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                         bookingList[bookingIndex].slot = newSlot + 1;
 
