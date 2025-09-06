@@ -54,8 +54,11 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
         for (int d = 0; d < DAYS; d++) {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             cout << "\n" << dayNames[d] << ":" << endl; // Header row 
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -64,6 +67,9 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
             cout << "\n" << dayNames[d] << ":" << endl; // Header row 
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -128,8 +134,11 @@ void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& 
             cout << "Week     : " << bookingList[i].week << endl;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             cout << "Day      : " << dayNames[bookingList[i].day] << endl;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -138,6 +147,9 @@ void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& 
             cout << "Day      : " << dayNames[bookingList[i].day] << endl;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

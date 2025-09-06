@@ -6,8 +6,11 @@
 using namespace std;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -15,6 +18,9 @@ string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -85,7 +91,10 @@ while (true) {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -103,6 +112,9 @@ while (true) {
             }
 =======
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -219,8 +231,11 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Week    : " << bookingList[i].week << endl;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             cout << "Day     : " << daynNames[bookingList[i].day] << endl;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -229,6 +244,9 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Day     : " << daynNames[bookingList[i].day] << endl;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -268,8 +286,11 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                     int oldWeek = bookingList[bookingIndex].week - 1;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     int oldDay = bookingList[bookingIndex].day;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -278,6 +299,9 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                     int oldDay = bookingList[bookingIndex].day;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -310,8 +334,11 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                                         bookingList[bookingIndex].week = newWeek + 1;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                         bookingList[bookingIndex].day = newDay;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 <<<<<<< HEAD
@@ -320,6 +347,9 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                                         bookingList[bookingIndex].day = newDay;
 >>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
