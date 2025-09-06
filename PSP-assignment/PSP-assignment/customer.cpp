@@ -36,13 +36,14 @@ int getValidatedInput(int min, int max, const string& prompt) {
 }
 
 bool processPayment(double amount, string service) {
-    string cardNumber, cvv, expiry, confirm1;
-    char confirm2;
+    string cardNumber, cvv, expiry, confirmCheck;
+    char confirmValid;
     const double SERVICE_CHARGE = 100.00;
     double total;
 
     cout << "=== Payment Gateway ===" << endl;
     cout << "Service\t: " << service << endl;
+    cout << fixed << setprecision(2);
     cout << "Amount to Pay: RM" << amount << " (Service Price) + " << "RM" << SERVICE_CHARGE << " (Service Charge)" << endl;
     total = amount + SERVICE_CHARGE;
     cout << "Total Payment: RM" << total << endl;
@@ -98,15 +99,15 @@ bool processPayment(double amount, string service) {
     // Confirm Payment
     while (true) {
         cout << "\nConfirm Payment? (Y/N): ";
-        cin >> confirm1;
+        cin >> confirmCheck;
 
-        if (confirm1.length() == 1) {
-            confirm2 = confirm1[0];
-            if (confirm2 == 'Y' || confirm2 == 'y') {
+        if (confirmCheck.length() == 1) {
+            confirmValid = confirmCheck[0];
+            if (confirmValid == 'Y' || confirmValid == 'y') {
                 cout << "\n[OK] Payment Successful!" << endl;
                 return true;
             }
-            else if (confirm2 == 'N' || confirm2 == 'n') {
+            else if (confirmValid == 'N' || confirmValid == 'n') {
                 cout << "\n[OOPS] Payment Cancelled!" << endl;
                 return false;
             }
@@ -154,41 +155,132 @@ void addBooking(Booking bookingList[], int& bookingCount,
     }
 }
 
-void showBookings(Booking bookingList[], int bookingCount, const string& currentUser) {
-    cout << string(14, '=') << " My Bookings " << string(14, '=') << endl;
+void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], int& bookingCount, const string& currentUser) {
+    cout << string(17, '=') << " My Bookings " << string(17, '=') << endl;
 
-	bool found = false;
+    int customerIndices[100]; // assume max 100 bookings per customer
+    int customerCount = 0;
 
+    // Display customer bookings
     for (int i = 0; i < bookingCount; i++) {
-        if (bookingList[i].customerName == currentUser) //only show bookings of the logged in customer
-        {
-            found = true;
-            cout << "\nBooking #" << i + 1 << endl;
+        if (bookingList[i].customerName == currentUser) {
+            customerIndices[customerCount] = i;
+            customerCount++;
+
+            cout << "\n[" << customerCount << "] Booking ID #" << i + 1 << endl;
             cout << "Expert  : " << bookingList[i].expertName << endl;
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
-		    cout << "Day     : " << daynames[bookingList[i].day] << endl;   
+            cout << "Day     : " << daynames[bookingList[i].day] << endl;
             cout << "Slot    : " << bookingList[i].slot << endl;
-            cout << "Amount  : RM" << bookingList[i].amount << " + RM100 (Service Charge)" << endl;
-            cout << string(41, '-') << endl;
+            cout << fixed << setprecision(2);
+            cout << "Amount  : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;
+            cout << string(47, '-') << endl;
         }
     }
-    if (!found)
-    {
-		cout << "No bookings found for " << currentUser << ".\n";
+
+    if (customerCount == 0) {
+        cout << "\nNo Bookings Found For " << currentUser << "." << endl;
+        return;
     }
+
+    string cancelChoice;
+    do {
+        cout << "\nDo you want to cancel a booking? (Y/N): ";
+        cin >> cancelChoice;
+
+        if (cancelChoice.length() == 1) {
+            if (cancelChoice[0] == 'Y' || cancelChoice[0] == 'y') {
+                int choice = getValidatedInput(1, customerCount, "Select Booking to Cancel");
+                int bookingIndex = customerIndices[choice - 1];
+
+                // Find expert index
+                int expertIndex = -1;
+                for (int i = 0; i < expertCount; i++) {
+                    if (experts[i].username == bookingList[bookingIndex].expertName) {
+                        expertIndex = i;
+                        break;
+                    }
+                }
+
+                if (expertIndex != -1) {
+                    // Free old slot first
+                    int oldWeek = bookingList[bookingIndex].week - 1;
+                    int oldDay = bookingList[bookingIndex].day;
+                    int oldSlot = bookingList[bookingIndex].slot - 1;
+                    int oldIndex = oldDay * SLOTS_PER_DAY + oldSlot;
+                    experts[expertIndex].slots[oldWeek][oldIndex] = "FREE";
+
+                    // Ask if reschedule
+                    string rescheduleChoice;
+                    do {
+                        cout << "\nDo you wish to reschedule this booking instead? (Y/N): ";
+                        cin >> rescheduleChoice;
+                        if (rescheduleChoice.length() == 1) {
+                            if (rescheduleChoice[0] == 'Y' || rescheduleChoice[0] == 'y') {
+                                system("CLS");
+                                ShowExpertSchedule(experts, expertCount, expertIndex);
+                                bool success = false;
+                                while (!success) {
+                                    cout << "\n--- Rescheduling ---" << endl;
+                                    int newWeek = getValidatedInput(1, 4, "Choose New Week") - 1;
+                                    int newDay = getValidatedInput(1, 5, "Choose New Day") - 1;
+                                    int newSlot = getValidatedInput(1, 2, "Choose New Slot") - 1;
+
+                                    int newIndex = newDay * SLOTS_PER_DAY + newSlot;
+
+                                    if (experts[expertIndex].slots[newWeek][newIndex] == "FREE") {
+                                        experts[expertIndex].slots[newWeek][newIndex] = "BOOKED";
+
+                                        // Update booking
+                                        bookingList[bookingIndex].week = newWeek + 1;
+                                        bookingList[bookingIndex].day = newDay;
+                                        bookingList[bookingIndex].slot = newSlot + 1;
+
+                                        cout << "\n[OK] Booking Rescheduled Successfully!" << endl;
+                                        success = true;
+                                        break;
+                                    }
+                                    else {
+                                        cout << "\n[OOPS] Slot Already Booked! Please Try Again." << endl;
+                                        continue;
+                                    }
+                                } return;
+                            }
+                            else if (rescheduleChoice[0] == 'N' || rescheduleChoice[0] == 'n') {
+                                // If no reschedule, remove booking completely
+                                for (int i = bookingIndex; i < bookingCount - 1; i++) {
+                                    bookingList[i] = bookingList[i + 1];
+                                }
+                                bookingCount--;
+
+                                cout << "\n[OK] Booking Cancelled Successfully!" << endl;
+                                break;
+                            }
+                        }
+                        cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+                    } while (true);
+                    return;
+                }
+            }
+            else if (cancelChoice[0] == 'N' || cancelChoice[0] == 'n') {
+                cout << "Returning Without Cancelling....." << endl;
+                break;
+            }
+        }
+        cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
+    } while (true);
+    return;
 }
 
 // ================== Customer Login & Menu ==================
 void customer(ExpertInfo experts[], int count, Booking bookingList[], int& bookingCount) {
     char username[50];
-    string password, expectedpw, payment, service;
-    string choice1, decision1, paymentchoice1;
-    char choice2, decision2, paymentchoice2;
-    const double NAIL_ART_PRICE = 600.00;
-    const double PEDI_MANICURE_PRICE = 300.00;
-    const double ACRYLIC_PRICE = 750.00;
+    string password, expectedpw;
     bool validUsername = false, validPassword = false;
+
+    string payment, service;
+    string choice, decision, paymentchoice;
 
     clearInputBuffer(); // Clear leftover newline
 
@@ -339,17 +431,13 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
 
             do {
                 cout << "\nDo you want to check appointment availability? (Y/N): ";
-                /*cin.clear();
-                cin.ignore();
-                getline(cin, choice1);*/
-                cin >> choice1;
+                cin >> choice;
 
-                if (choice1.length() != 1) {
+                if (choice.length() != 1) {
                     cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
                     continue;
                 }
-                choice2 = choice1[0];
-                switch (choice2) {
+                switch (choice[0]) {
                 case 'Y':
                 case 'y':
                     int serviceChoice, expertIndex;
@@ -360,15 +448,13 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
 
                     do {
                         cout << "\nDo you want to book an appointment? (Y/N): ";
-                        cin >> decision1;
-                        //getline(cin, decision1);
+                        cin >> decision;
 
-                        if (decision1.length() != 1) {
+                        if (decision.length() != 1) {
                             cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
                             continue;
                         }
-                        decision2 = decision1[0];
-                        switch (decision2) {
+                        switch (decision[0]) {
                         case 'Y':
                         case 'y':
                             int weekChoice, dayChoice, slotChoice;
@@ -385,6 +471,9 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                     cout << "\nSlot is Available" << endl;
 
                                     double amount = 0.00;
+                                    const double NAIL_ART_PRICE = 600.00;
+                                    const double PEDI_MANICURE_PRICE = 300.00;
+                                    const double ACRYLIC_PRICE = 750.00;
                                     switch (serviceChoice) {
                                     case 0:
                                         amount = NAIL_ART_PRICE;
@@ -402,7 +491,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                             if (cin.fail() || (subChoice != 1 && subChoice != 2)) {
                                                 cin.clear();
                                                 cin.ignore(1000, '\n');
-                                                cout << "[ERROR] Invalid Selection! Please Enter 1 or 2.\n";
+                                                cout << "[ERROR] Invalid Selection! Please Enter 1 or 2." << endl;
                                                 continue;
                                             }
 
@@ -426,11 +515,10 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                     cout << "You have selected the service: " << service << endl;
                                     cout << "The amount to be payed is RM" << amount << endl;
                                     cout << "Proceed with payment to confirm booking? (Y/N): ";
-                                    cin >> paymentchoice1;
+                                    cin >> paymentchoice;
 
-                                    if (paymentchoice1.length() == 1) {
-                                        paymentchoice2 = paymentchoice1[0];
-                                        if (paymentchoice2 == 'Y' || paymentchoice2 == 'y') {
+                                    if (paymentchoice.length() == 1) {
+                                        if (paymentchoice[0] == 'Y' || paymentchoice[0] == 'y') {
                                             system("CLS");
                                             if (processPayment(amount, service)) {
                                                 experts[serviceChoice].slots[weekChoice][index] = "BOOKED";
@@ -452,7 +540,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                             }
                                             break;
                                         }
-                                        else if (paymentchoice2 == 'N' || paymentchoice2 == 'n') {
+                                        else if (paymentchoice[0] == 'N' || paymentchoice[0] == 'n') {
                                             cout << "[OOPS] Booking Cancelled! Returning to Menu......" << endl;
                                             break;
                                         }
@@ -491,8 +579,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             break;
         case 3:
             system("CLS");
-            showBookings(bookingList, bookingCount, string(username));
-
+            showBookings(experts, count, bookingList, bookingCount, string(username));
             cout << "\nPress [ENTER] to return to Customer Menu.....";
             clearInputBuffer();
             cin.get();
