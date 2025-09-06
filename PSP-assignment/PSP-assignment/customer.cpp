@@ -68,20 +68,28 @@ bool processPayment(double amount, string service) {
     while (true) {
         cout << "Enter Expiry Date (MM/YY): ";
         cin >> expiry;
-        string monthStr = cardNumber.substr(0, 1);
-        int month = stoi(monthStr);
 
-        if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
-            expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
-            break;
+        // Check format first
+        if (expiry.length() == 5 &&
+            isdigit(expiry[0]) && isdigit(expiry[1]) &&
+            expiry[2] == '/' &&
+            isdigit(expiry[3]) && isdigit(expiry[4]))
+        {
+            // Extract month
+            string monthStr = expiry.substr(0, 2);
+            int month = stoi(monthStr);
+
+            // Handle invalid months first
+            if (month <= 0 || month > 12) {
+                cout << "[ERROR] Invalid month in Expiry Date! Must be between 01 - 12.\n" << endl;
+            }
+            else {
+                break;  //Valid expiry date 
+            }
         }
         else {
             cout << "[ERROR] Invalid Expiry Date! Format must be MM/YY.\n" << endl;
         }
-        //if (month <= 0 || month > 12)
-        //{
-        //    cout << "[ERROR] Invalid month in Card Number! Please enter a number between 01 - 12.";
-        //}
     }
 
     // Validate CVV
