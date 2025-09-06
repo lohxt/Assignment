@@ -4,7 +4,14 @@
 #include <cctype>
 #include "mainheader.h"
 using namespace std;
+<<<<<<< Updated upstream
 string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
+=======
+<<<<<<< HEAD
+=======
+string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+>>>>>>> Stashed changes
 
 void clearInputBuffer() {
     char c;
@@ -70,6 +77,23 @@ while (true) {
     cout << "Enter Expiry Date (MM/YY): ";
     cin >> expiry;
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
+            expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
+
+            string monthStr = expiry.substr(0, 2);
+            int month = stoi(monthStr);
+
+            if (month >= 1 && month <= 12) {
+                break; 
+            }
+            else {
+                cout << "[ERROR] Invalid Month in Expiry Date! Month must be between 01-12.\n" << endl;
+            }
+=======
+>>>>>>> Stashed changes
     if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
         expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
         
@@ -81,6 +105,7 @@ while (true) {
         } else {
             // valid expiry
             break;
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
         }
     } else {
         cout << "[ERROR] Invalid Expiry Date! Format must be MM/YY.\n" << endl;
@@ -147,7 +172,7 @@ void addBooking(Booking bookingList[], int& bookingCount,
     const string& customerName,
     const string& expertName,
     const string& service,
-    int week, int day, int slot, double amount)
+    int week, Day day, int slot, double amount)
 {
     if (bookingCount < MAX_BOOKINGS) {
         bookingList[bookingCount].customerName = customerName; // Store Customer Name
@@ -180,7 +205,15 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Expert  : " << bookingList[i].expertName << endl;
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
+<<<<<<< Updated upstream
             cout << "Day     : " << daynNames[bookingList[i].day] << endl;
+=======
+<<<<<<< HEAD
+            cout << "Day     : " << getDayName(bookingList[i].day) << endl;
+=======
+            cout << "Day     : " << daynNames[bookingList[i].day] << endl;
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+>>>>>>> Stashed changes
             cout << "Slot    : " << bookingList[i].slot << endl;
             cout << fixed << setprecision(2);
             cout << "Amount  : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;
@@ -215,7 +248,15 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                 if (expertIndex != -1) {
                     // Free old slot first
                     int oldWeek = bookingList[bookingIndex].week - 1;
+<<<<<<< Updated upstream
                     int oldDay = bookingList[bookingIndex].day;
+=======
+<<<<<<< HEAD
+                    int oldDay = (int)bookingList[bookingIndex].day;
+=======
+                    int oldDay = bookingList[bookingIndex].day;
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+>>>>>>> Stashed changes
                     int oldSlot = bookingList[bookingIndex].slot - 1;
                     int oldIndex = oldDay * SLOTS_PER_DAY + oldSlot;
                     experts[expertIndex].slots[oldWeek][oldIndex] = "FREE";
@@ -243,7 +284,15 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
 
                                         // Update booking
                                         bookingList[bookingIndex].week = newWeek + 1;
+<<<<<<< Updated upstream
                                         bookingList[bookingIndex].day = newDay;
+=======
+<<<<<<< HEAD
+                                        bookingList[bookingIndex].day = (Day)newDay;
+=======
+                                        bookingList[bookingIndex].day = newDay;
+>>>>>>> 23eb588d4a58fefea13a0f8dd5d6cd8d6d8b768f
+>>>>>>> Stashed changes
                                         bookingList[bookingIndex].slot = newSlot + 1;
 
                                         cout << "\n[OK] Booking Rescheduled Successfully!" << endl;
@@ -533,12 +582,13 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                                 experts[serviceChoice].slots[weekChoice][index] = "BOOKED";
                                                 cout << "\n[OK] Booking Confirmed!" << endl;
 
+												Day chosenDay = (Day)dayChoice;
                                                 addBooking(bookingList, bookingCount,
                                                     string(username),        // pass logged-in customer name
                                                     getExpertName(expertIndex),
                                                     service,
                                                     weekChoice + 1,
-                                                    dayChoice,
+                                                    chosenDay,
                                                     slotChoice + 1,
                                                     amount);
 
@@ -567,7 +617,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                         case 'N':
                         case 'n':
                             system("CLS");
-                            break;
+                            break;  
                         default:
                             cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
                             continue;
