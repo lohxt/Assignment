@@ -5,7 +5,6 @@
 #include "mainheader.h"
 using namespace std;
 
-string dayNames[DAYS] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 
 // ================== Helper Functions ==================
 
@@ -54,7 +53,7 @@ void ShowAllSchedules(ExpertInfo experts[], int count) {
     for (int w = 0; w < WEEKS; w++) {
         cout << "\n" << string(23, '=') << " Week " << (w + 1) << " " << string(24, '=');
         for (int d = 0; d < DAYS; d++) {
-            cout << "\n" << dayNames[d] << ":" << endl; // Header row 
+            cout << "\n" << getDayName((Day)d) << ":" << endl; // Header row 
             cout << left << setw(10) << "Time";
             for (int e = 0; e < count; e++) {
                 cout << setw(15) << experts[e].username;
@@ -85,7 +84,7 @@ void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex) {
         // Header row: days
         cout << left << setw(12) << "Time";
         for (int d = 0; d < DAYS; d++) {
-            cout << setw(12) << dayNames[d];
+            cout << setw(12) << getDayName((Day)d);
         }
         cout << "\n" << string(12 + 12 * DAYS, '-') << "\n";
 
@@ -114,7 +113,7 @@ void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& 
             cout << "Customer : " << bookingList[i].customerName << endl;
             cout << "Service  : " << bookingList[i].service << endl;
             cout << "Week     : " << bookingList[i].week << endl;
-            cout << "Day      : " << dayNames[bookingList[i].day] << endl;
+            cout << "Day      : " << getDayName((Day)bookingList[i].day) << endl;
             cout << "Slot     : " << bookingList[i].slot << endl;
             cout << "Duration : 3 Hours" << endl;
             cout << fixed << setprecision(2);

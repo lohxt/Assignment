@@ -4,7 +4,6 @@
 #include <cctype>
 #include "mainheader.h"
 using namespace std;
-const char* daynames[5] = { "Mon", "Tue", "Wed", "Thu", "Fri" };
 
 void clearInputBuffer() {
     char c;
@@ -69,6 +68,8 @@ bool processPayment(double amount, string service) {
     while (true) {
         cout << "Enter Expiry Date (MM/YY): ";
         cin >> expiry;
+        string monthStr = cardNumber.substr(0, 1);
+        int month = stoi(monthStr);
 
         if (expiry.length() == 5 && isdigit(expiry[0]) && isdigit(expiry[1]) &&
             expiry[2] == '/' && isdigit(expiry[3]) && isdigit(expiry[4])) {
@@ -77,6 +78,10 @@ bool processPayment(double amount, string service) {
         else {
             cout << "[ERROR] Invalid Expiry Date! Format must be MM/YY.\n" << endl;
         }
+        //if (month <= 0 || month > 12)
+        //{
+        //    cout << "[ERROR] Invalid month in Card Number! Please enter a number between 01 - 12.";
+        //}
     }
 
     // Validate CVV
@@ -138,7 +143,7 @@ void addBooking(Booking bookingList[], int& bookingCount,
     const string& customerName,
     const string& expertName,
     const string& service,
-    int week, int day, int slot, double amount)
+    int week, Day day, int slot, double amount)
 {
     if (bookingCount < MAX_BOOKINGS) {
         bookingList[bookingCount].customerName = customerName; // Store Customer Name
@@ -171,7 +176,7 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
             cout << "Expert  : " << bookingList[i].expertName << endl;
             cout << "Service : " << bookingList[i].service << endl;
             cout << "Week    : " << bookingList[i].week << endl;
-            cout << "Day     : " << daynames[bookingList[i].day] << endl;
+            cout << "Day     : " << getDayName((Day)bookingList[i].day) << endl;
             cout << "Slot    : " << bookingList[i].slot << endl;
             cout << fixed << setprecision(2);
             cout << "Amount  : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;
@@ -206,7 +211,7 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                 if (expertIndex != -1) {
                     // Free old slot first
                     int oldWeek = bookingList[bookingIndex].week - 1;
-                    int oldDay = bookingList[bookingIndex].day;
+                    int oldDay = (int)bookingList[bookingIndex].day;
                     int oldSlot = bookingList[bookingIndex].slot - 1;
                     int oldIndex = oldDay * SLOTS_PER_DAY + oldSlot;
                     experts[expertIndex].slots[oldWeek][oldIndex] = "FREE";
@@ -226,7 +231,6 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                                     int newWeek = getValidatedInput(1, 4, "Choose New Week") - 1;
                                     int newDay = getValidatedInput(1, 5, "Choose New Day") - 1;
                                     int newSlot = getValidatedInput(1, 2, "Choose New Slot") - 1;
-
                                     int newIndex = newDay * SLOTS_PER_DAY + newSlot;
 
                                     if (experts[expertIndex].slots[newWeek][newIndex] == "FREE") {
@@ -234,7 +238,7 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
 
                                         // Update booking
                                         bookingList[bookingIndex].week = newWeek + 1;
-                                        bookingList[bookingIndex].day = newDay;
+                                        bookingList[bookingIndex].day = (Day)newDay;
                                         bookingList[bookingIndex].slot = newSlot + 1;
 
                                         cout << "\n[OK] Booking Rescheduled Successfully!" << endl;
@@ -524,12 +528,14 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                                                 experts[serviceChoice].slots[weekChoice][index] = "BOOKED";
                                                 cout << "\n[OK] Booking Confirmed!" << endl;
 
+                                                Day chosenDay = (Day)dayChoice;
+
                                                 addBooking(bookingList, bookingCount,
                                                     string(username),        // pass logged-in customer name
                                                     getExpertName(expertIndex),
                                                     service,
                                                     weekChoice + 1,
-                                                    dayChoice,
+                                                    chosenDay,
                                                     slotChoice + 1,
                                                     amount);
 

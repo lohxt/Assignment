@@ -9,13 +9,25 @@ const int SLOTS_PER_DAY = 2; // 2 sessions per day, 3 hours each (9am-12pm, 12pm
 const int TOTAL_SLOTS_WEEK = DAYS * SLOTS_PER_DAY; // 30 slots per week
 const int MAX_BOOKINGS = 100;
 
+// enum for days of the week
+enum Day {
+    MON = 0,
+    TUE,
+    WED,
+    THU,
+    FRI,
+    DAYS_COUNT
+};
+
+const char* getDayName(Day day);
+
 // Structures
 struct Booking {
     string customerName;   // NEW
     string expertName;
     string service;
     int week;
-    int day;
+    Day day;
     int slot;
     double amount;
 };

@@ -47,7 +47,7 @@ void Customer_list(Booking bookingList[], int bookingCount) {
 		cout << "Service  : " << bookingList[i].service << endl;
 		cout << "Expert   : " << bookingList[i].expertName << endl;
 		cout << "Week     : " << bookingList[i].week << endl;
-		cout << "Day      : " << dayNames[bookingList[i].day] << endl;
+		cout << "Day      : " << getDayName((Day)bookingList[i].day) << endl;
 		cout << "Slot     : " << bookingList[i].slot << endl;
         cout << fixed << setprecision(2);
         cout << "Amount   : RM" << bookingList[i].amount << " + RM100.00 (Service Charge)" << endl;

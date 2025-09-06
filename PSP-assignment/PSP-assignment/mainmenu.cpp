@@ -4,6 +4,17 @@
 #include "mainheader.h"
 using namespace std;
 
+const char* getDayName(Day day) {
+    switch (day) {
+    case MON: return "Mon";
+    case TUE: return "Tue";
+    case WED: return "Wed";
+    case THU: return "Thu";
+    case FRI: return "Fri";
+    default:  return "N/A";
+    }
+}
+
 int main() {
     int role;
     bool exitProgram = false;
