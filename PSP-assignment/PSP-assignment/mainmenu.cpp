@@ -18,15 +18,15 @@ const char* getDayName(Day day) {
 
 // --- Save bookings to text file (overwrite) ---
 void savebookingstofile(Booking bookingList[], int bookingCount) {
-    ofstream outFile("bookings.txt");
-    if (!outFile) {
-        cout << "[ERROR] Unable to open bookings.txt for writing.\n";
+    ofstream outfile("bookings.txt",ios::app);
+    if (!outfile) {
+        cout << "[ERROR] Unable to open file.\n";
         return;
     }
 
     for (int i = 0; i < bookingCount; ++i) {
         // Fields separated by '|', one booking per line
-        outFile << bookingList[i].customerName << '|'
+        outfile << bookingList[i].customerName << '|'
             << bookingList[i].expertName << '|'
             << bookingList[i].service << '|'
             << bookingList[i].week << '|'
@@ -35,22 +35,22 @@ void savebookingstofile(Booking bookingList[], int bookingCount) {
             << bookingList[i].amount << '|'
             << (bookingList[i].done ? 1 : 0) << '\n';
     }
-    outFile.close();
+    outfile.close();
 }
 
 // --- Load bookings from text file, return count ---
 int loadbookingsfromfile(Booking bookingList[], int maxSize) {
     ifstream infile("bookings.txt");
     if (!infile) {
-        return 0; // no file => no bookings
+        return 0; // no file means no bookings
     }
 
     int count = 0;
     while (count < maxSize) {
         // Read customerName up to '|'
-        if (!std::getline(infile, bookingList[count].customerName, '|')) break;
-        if (!std::getline(infile, bookingList[count].expertName, '|')) break;
-        if (!std::getline(infile, bookingList[count].service, '|')) break;
+        if (!getline(infile, bookingList[count].customerName, '|')) break;
+        if (!getline(infile, bookingList[count].expertName, '|')) break;
+        if (!getline(infile, bookingList[count].service, '|')) break;
 
         int week, dayInt, slot, doneInt;
         double amount;
@@ -74,7 +74,7 @@ int loadbookingsfromfile(Booking bookingList[], int maxSize) {
         bookingList[count].day = static_cast<Day>(dayInt);
         bookingList[count].slot = slot;
         bookingList[count].amount = amount;
-        bookingList[count].done = (doneInt != 0);
+        bookingList[count].done = false; // Reset status each startup
 
         ++count;
     }
@@ -88,8 +88,11 @@ int main() {
     bool exitProgram = false;
 
     // Clear feedback file at startup (user requested per-run feedback)
-    ofstream clearfile("feedback.txt", ios::trunc);
-    clearfile.close();
+    ofstream clearfeedback("feedback.txt", ios::trunc);
+    clearfeedback.close();
+
+    ofstream clearbooking("booking.txt", ios::trunc);
+    clearbooking.close();
 
     // Experts (initial usernames)
     ExpertInfo experts[3] = {
@@ -105,7 +108,8 @@ int main() {
     InitSchedules(experts, 3);
 
     // Load bookings from file (if any) and mark loaded bookings into schedules
-    bookingCount = loadbookingsfromfile(bookingList, MAX_BOOKINGS);
+    //bookingCount = loadbookingsfromfile(bookingList, MAX_BOOKINGS);
+    bookingCount = 0;
 
     for (int i = 0; i < bookingCount; ++i) {
         // find expert index by name
