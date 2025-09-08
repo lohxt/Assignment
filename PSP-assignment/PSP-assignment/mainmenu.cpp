@@ -20,7 +20,7 @@ const char* getDayName(Day day) {
 void savebookingstofile(Booking bookingList[], int bookingCount) {
     ofstream outfile("bookings.txt");
     if (!outfile) {
-        cout << "[ERROR] Unable to open file.\n";
+        cout << "[ERROR] Unable to open this file.\n";
         return;
     }
 
@@ -33,7 +33,7 @@ void savebookingstofile(Booking bookingList[], int bookingCount) {
             << static_cast<int>(bookingList[i].day) << '|'
             << bookingList[i].slot << '|'
             << bookingList[i].amount << '|'
-            << (bookingList[i].done ? 1 : 0) << '\n';
+            << bookingList[i].done << '\n';
     }
     outfile.close();
 }
@@ -74,7 +74,7 @@ int loadbookingsfromfile(Booking bookingList[], int maxSize) {
         bookingList[count].day = static_cast<Day>(dayInt);
         bookingList[count].slot = slot;
         bookingList[count].amount = amount;
-        bookingList[count].done = false; // Reset status each startup
+        bookingList[count].done = (doneInt != 0);
 
         ++count;
     }

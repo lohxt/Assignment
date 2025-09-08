@@ -392,7 +392,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
         while ((option < 1 || option > 5) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
+            cout << "[ERROR] Invalid Selection! Please Choose (1-5) Only." << endl;
             cout << "\nSelection: ";
             cin >> option;
         }

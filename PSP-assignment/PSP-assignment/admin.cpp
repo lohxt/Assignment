@@ -174,7 +174,7 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
         return;
     }
     
-    if (choice < 1 || choice>bookingCount)
+    if (choice < 1 || choice > bookingCount)
     {
         cout << "[ERROR] Invalid choice!\n";
         return;
@@ -291,7 +291,7 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         while ((option < 1 || option > 8) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
+            cout << "[ERROR] Invalid Selection! Please Choose (1-8) Only." << endl;
             cout << "\nSelection: ";
             cin >> option;
         }
