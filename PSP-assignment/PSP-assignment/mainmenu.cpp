@@ -18,7 +18,7 @@ const char* getDayName(Day day) {
 
 // --- Save bookings to text file (overwrite) ---
 void savebookingstofile(Booking bookingList[], int bookingCount) {
-    ofstream outfile("bookings.txt",ios::app);
+    ofstream outfile("bookings.txt");
     if (!outfile) {
         cout << "[ERROR] Unable to open file.\n";
         return;
@@ -87,13 +87,6 @@ int main() {
     int role;
     bool exitProgram = false;
 
-    // Clear feedback file at startup (user requested per-run feedback)
-    ofstream clearfeedback("feedback.txt", ios::trunc);
-    clearfeedback.close();
-
-    ofstream clearbooking("booking.txt", ios::trunc);
-    clearbooking.close();
-
     // Experts (initial usernames)
     ExpertInfo experts[3] = {
         {"JOSHUA LOKE", "123"},
@@ -108,8 +101,8 @@ int main() {
     InitSchedules(experts, 3);
 
     // Load bookings from file (if any) and mark loaded bookings into schedules
-    //bookingCount = loadbookingsfromfile(bookingList, MAX_BOOKINGS);
-    bookingCount = 0;
+    bookingCount = loadbookingsfromfile(bookingList, MAX_BOOKINGS);
+    //bookingCount = 0;
 
     for (int i = 0; i < bookingCount; ++i) {
         // find expert index by name
