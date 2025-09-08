@@ -30,6 +30,7 @@ struct Booking {
     Day day;
     int slot;
     double amount;
+    bool done;
 };
 
 struct ExpertInfo {
@@ -37,6 +38,9 @@ struct ExpertInfo {
     string password;
     string slots[WEEKS][DAYS * SLOTS_PER_DAY] = { "FREE" }; // all slots default to "FREE"
 };
+
+void markbookingdone(Booking bookingList[], int bookingCount);
+int loadbookingsfromfile(Booking bookingList[], int maxSize);
 
 // ===== Admin functions =====
 void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
@@ -52,9 +56,10 @@ void InitSchedules(ExpertInfo experts[], int count);
 void ShowAllSchedules(ExpertInfo experts[], int count);
 void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex);
 void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& expertName);
-void ShowExpertBonus(string username, int count, Booking bookingList[], int bookingCount);
+void ShowExpertBonus(string username, Booking bookingList[], int bookingCount);
 
 // ===== Customer functions =====
 void customer(ExpertInfo experts[], int count, Booking bookingList[], int& bookingCount);
 void clearInputBuffer();
 void customerfeedback(const string& customername);
+void savebookingstofile(Booking bookinglist[], int bookingCount);

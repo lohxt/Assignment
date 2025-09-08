@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <cctype>
 #include <string>
-#include<fstream>
+#include <fstream>
 #include "mainheader.h"
 using namespace std;
 
@@ -140,6 +140,74 @@ void ViewCustomerFeedback() {
     }
 }
 
+void markbookingdone(Booking bookingList[], int bookingCount) {
+    if (bookingCount == 0)
+    {
+        cout << "No bookings available.\n";
+        return;
+    }
+    cout << "===== Booking List =====\n";
+    for (int i = 0; i < bookingCount; i++)
+    {
+        cout << i + 1 << ". "
+            << bookingList[i].customerName << " | "
+            << bookingList[i].service << " | "
+            << bookingList[i].expertName
+            << " | Week " << bookingList[i].week
+            << " | "<<(bookingList[i].done ? "[DONE]": "[PENDING]")
+            << endl;
+    }
+    int choice;
+    cout << "\nSelect the booking that needs to be marked (Enter 0 to cancel):\n";
+    cin >> choice;
+
+    if (cin.fail())
+    {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "[ERROR] Invalid input!\n";
+        return;
+    }
+    if (choice == 0)
+    {
+        cout << "Returning to Admin Menu.....\n";
+        return;
+    }
+    
+    if (choice < 1 || choice>bookingCount)
+    {
+        cout << "[ERROR] Invalid choice!\n";
+        return;
+    }
+    
+    int index = choice - 1;
+
+    cout << "\nCurrent status: "
+        << (bookingList[index].done ? "[DONE]" : "[PENDING]") << endl;
+    cout << "Do you want to mark it as:\n";
+    cout << "1. DONE\n";
+    cout << "2. PENDING\n";
+    cout << "Selection: ";
+
+    int statusChoice;
+    cin >> statusChoice;
+
+    if (statusChoice == 1) {
+        bookingList[index].done = true;
+        cout << "[OK] Booking marked as DONE.\n";
+    }
+    else if (statusChoice == 2) {
+        bookingList[index].done = false;
+        cout << "[OK] Booking marked as PENDING.\n";
+    }
+    else {
+        cout << "[ERROR] Invalid selection. Returning without changes.\n";
+        return;
+    }
+
+    savebookingstofile(bookingList, bookingCount);
+}
+
 // ================== Admin Login & Menu ==================
 void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     char username[50];
@@ -214,12 +282,13 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         cout << "3. View Customer List" << endl;
         cout << "4. View Generate Sales Reports" << endl;
         cout << "5. View Expert Bonus Entitlements" << endl;
-        cout << "6. View Customer Feedback." << endl;
-        cout << "7. Exit to Main Menu\n" << endl;
+        cout << "6. View Customer Feedback" << endl;
+        cout << "7. Mark Booking as Done" << endl;
+        cout << "8. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
         cin >> option;
 
-        while ((option < 1 || option > 7) || cin.fail()) {
+        while ((option < 1 || option > 8) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
@@ -390,12 +459,20 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         case 6:
             system("CLS");
             ViewCustomerFeedback();
-            cout << "\n Press [ENTER] to return to admin menu.\n";
+            cout << "\n Press [ENTER] to return to Admin Menu.....\n";
             clearInputBuffer();
             cin.get();
             system("CLS");
             break;
         case 7:
+            system("CLS");
+            markbookingdone(bookingList, bookingCount);
+            cout << "\n Press [ENTER] to return to Admin Menu.....\n";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 8:
             exitMenu = true;
             system("CLS");
             break;

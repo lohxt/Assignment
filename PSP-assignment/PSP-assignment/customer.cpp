@@ -37,7 +37,6 @@ void customerfeedback(const string& customername) {
     cout << "\nThank you for your feedback, we appreciate your opinion.\n";
 }
 
-
 int getValidatedInput(int min, int max, const string& prompt) {
     int input;
 

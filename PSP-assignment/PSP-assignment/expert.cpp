@@ -127,7 +127,7 @@ void ShowExpertCustomers(Booking bookingList[], int bookingCount, const string& 
     }
 }
 
-void ShowExpertBonus(string username, int count, Booking bookingList[], int bookingCount) {
+void ShowExpertBonus(string username, Booking bookingList[], int bookingCount) {
     int hoursWorked = 0;
     double totalCharges = 0.0;
     double bonusRate = 0.0;
@@ -241,11 +241,12 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
         cout << "1. View Individual Schedule" << endl;
         cout << "2. View Assigned Customer List" << endl;
         cout << "3. View Earnings Bonus Entitlement" << endl;
-        cout << "4. Exit to Main Menu\n" << endl;
+        cout << "4. Mark Booking Status" << endl;
+        cout << "5. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
         cin >> option;
 
-        while ((option < 1 || option > 4) || cin.fail()) {
+        while ((option < 1 || option > 5) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
@@ -272,13 +273,21 @@ void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingC
             break;
         case 3:
             system("CLS");
-            ShowExpertBonus(username, count, bookingList, bookingCount);
+            ShowExpertBonus(username, bookingList, bookingCount);
             cout << "\nPress [ENTER] to return to Expert Menu.....";
             clearInputBuffer();
             cin.get();
             system("CLS");
             break;
         case 4:
+            system("CLS");
+            markbookingdone(bookingList, bookingCount);
+            cout << "\nPress [ENTER] to return to Expert Menu.....";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 5:
             exitMenu = true;
             system("CLS");
             break;
