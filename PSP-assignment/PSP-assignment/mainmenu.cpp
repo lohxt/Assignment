@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include<fstream>
 #include "mainheader.h"
 using namespace std;
 
@@ -18,6 +19,9 @@ const char* getDayName(Day day) {
 int main() {
     int role;
     bool exitProgram = false;
+
+    ofstream clearfile("feedback.txt", ios::trunc);
+    clearfile.close();
 
     ExpertInfo experts[3] = {
         {"JOSHUA LOKE", "123"},

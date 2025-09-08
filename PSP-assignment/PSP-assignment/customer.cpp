@@ -15,28 +15,28 @@ void clearInputBuffer() {
 
 void customerfeedback(const string& customername) {
     string feedback;
-    char choice;
-    
+
     cout << "==== Feedback Form ====\n"
-        << "We value your feedback, " << customername << "! Let us know if there is any improvements we can make.\n";
+        << "We value your feedback, " << customername << "! Let us know if there are any improvements we can make.\n";
     clearInputBuffer();
 
     cout << "Please enter your feedback about our service: \n";
     getline(cin, feedback);
 
-    ofstream fbfile("feedback.txt");
-    if (!fbfile)
-    {
+    ofstream fbfile("feedback.txt",ios::app); 
+    if (!fbfile) {
         cout << "[ERROR] Unable to open feedback file.";
         return;
     }
-    fbfile << "Customer : " << customername << endl;
-    fbfile << "Feedback : \n" << feedback << endl;
-    fbfile << "------------------------------------------";
+
+    // Write on the same line
+    fbfile << customername << "|" << feedback << endl;
+
     fbfile.close();
 
-    cout << "\nThank you for you feedback, we apprieciate your opinion.\n";
-};
+    cout << "\nThank you for your feedback, we appreciate your opinion.\n";
+}
+
 
 int getValidatedInput(int min, int max, const string& prompt) {
     int input;

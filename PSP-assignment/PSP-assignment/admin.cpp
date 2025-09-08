@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <cctype>
 #include <string>
+#include<fstream>
 #include "mainheader.h"
 using namespace std;
 
@@ -104,6 +105,41 @@ void Expert_bonus(ExpertInfo experts[], int count, Booking bookingList[], int bo
     }
 }
 
+void ViewCustomerFeedback() {
+    system("CLS");
+    cout << string(15, '=') << " CUSTOMER FEEDBACK " << string(15, '=') << "\n\n";
+
+    ifstream outfbfile("feedback.txt");
+    if (!outfbfile.is_open()) {
+        cout << "No feedback is available. (File unable to open)\n";
+        return;
+    }
+
+    string line;
+    bool hasFeedback = false;
+
+    while (getline(outfbfile, line)) {
+        if (line.empty()) continue;
+
+        size_t sep = line.find('|');
+        if (sep != string::npos) {
+            string customername = line.substr(0, sep);
+            string feedback = line.substr(sep + 1);
+
+            cout << "Customer: " << customername << endl;
+            cout << "Feedback: " << feedback << endl;
+            cout << "------------------------------------------\n";
+            hasFeedback = true;
+        }
+    }
+
+    outfbfile.close();
+
+    if (!hasFeedback) {
+        cout << "No feedback has been submitted yet.\n";
+    }
+}
+
 // ================== Admin Login & Menu ==================
 void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     char username[50];
@@ -178,11 +214,12 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         cout << "3. View Customer List" << endl;
         cout << "4. View Generate Sales Reports" << endl;
         cout << "5. View Expert Bonus Entitlements" << endl;
-        cout << "6. Exit to Main Menu\n" << endl;
+        cout << "6. View Customer Feedback." << endl;
+        cout << "7. Exit to Main Menu\n" << endl;
         cout << "Selection: ";
         cin >> option;
 
-        while ((option < 1 || option > 6) || cin.fail()) {
+        while ((option < 1 || option > 7) || cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
             cout << "[ERROR] Invalid Selection! Please Choose (1-4) Only." << endl;
@@ -351,6 +388,14 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
             system("CLS");
             break;
         case 6:
+            system("CLS");
+            ViewCustomerFeedback();
+            cout << "\n Press [ENTER] to return to admin menu.\n";
+            clearInputBuffer();
+            cin.get();
+            system("CLS");
+            break;
+        case 7:
             exitMenu = true;
             system("CLS");
             break;
