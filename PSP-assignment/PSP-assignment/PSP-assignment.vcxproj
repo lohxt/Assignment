@@ -23,6 +23,7 @@
     <ClCompile Include="customer.cpp" />
     <ClCompile Include="expert.cpp" />
     <ClCompile Include="mainmenu.cpp" />
+    <ClCompile Include="merged.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mainheader.h" />
