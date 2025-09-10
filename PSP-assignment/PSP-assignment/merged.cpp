@@ -6,9 +6,9 @@
 using namespace std;
 
 // ================== CONSTANTS ==================
-const int WEEKS = 12;
+const int WEEKS = 4;
 const int DAYS = 5;
-const int SLOTS_PER_DAY = 3;
+const int SLOTS_PER_DAY = 2;
 const int MAX_BOOKINGS = 100;
 
 // ================== ENUM ==================
@@ -656,12 +656,15 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
     }
     if (choice == 0)
     {
+        cin.ignore(1000, '\n');
         cout << "Returning to Admin Menu.....\n";
         return;
     }
 
     if (choice < 1 || choice > bookingCount)
     {
+        cin.clear();
+        cin.ignore(1000, '\n');
         cout << "[ERROR] Invalid choice!\n";
         return;
     }
@@ -678,16 +681,27 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
     int statusChoice;
     cin >> statusChoice;
 
-    if (statusChoice == 1) {
+    if (cin.fail())
+    {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "[ERROR] Invalid Choice! ";
+    }
+    else if (statusChoice == 1) {
         bookingList[index].done = true;
+        cin.clear();
+        cin.ignore(1000, '\n');
         cout << "[OK] Booking marked as DONE.\n";
     }
     else if (statusChoice == 2) {
         bookingList[index].done = false;
+        cin.clear();
+        cin.ignore(1000, '\n');
         cout << "[OK] Booking marked as PENDING.\n";
     }
     else {
         cout << "[ERROR] Invalid selection. Returning without changes.\n";
+        clearInputBuffer();
         return;
     }
 
@@ -943,7 +957,7 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         case 6:
             system("CLS");
             ViewCustomerFeedback();
-            cout << "\n Press [ENTER] to return to Admin Menu.....\n";
+            cout << "\nPress [ENTER] to return to Admin Menu.....\n";
             clearInputBuffer();
             cin.get();
             system("CLS");
@@ -951,9 +965,8 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
         case 7:
             system("CLS");
             markbookingdone(bookingList, bookingCount);
-            cout << "\n Press [ENTER] to return to Admin Menu.....\n";
+            cout << "\nPress [ENTER] to return to Admin Menu.....\n";
             clearInputBuffer();
-            cin.get();
             system("CLS");
             break;
         case 8:
@@ -970,10 +983,14 @@ void customerfeedback(const string& customername) {
 
     cout << "==== Feedback Form ====\n"
         << "We value your feedback, " << customername << "! Let us know if there are any improvements we can make.\n";
-    clearInputBuffer();
-
-    cout << "Please enter your feedback about our service: \n";
+    cout << "Please enter your feedback about our service.(Enter 0 to cancel and return) \n";
     getline(cin, feedback);
+
+    if (feedback == "0")
+    {
+        cout << "\nFeedback canceled. Returning to Menu.....\n";
+        return;
+    }
 
     ofstream fbfile("feedback.txt", ios::app);
     if (!fbfile) {
@@ -1404,7 +1421,6 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
 
             cout << "\nPress [ENTER] to return to Customer Menu.....";
             clearInputBuffer();
-            cin.get();
             system("CLS");
             break;
         }
