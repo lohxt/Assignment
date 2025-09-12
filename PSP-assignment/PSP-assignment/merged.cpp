@@ -608,8 +608,10 @@ void ViewCustomerFeedback() {
     while (getline(outfbfile, line)) {
         if (line.empty()) continue;
 
+        // Each feedback entry is stored as "customerName|feedback"
+        // Find the separator "|" position
         size_t sep = line.find('|');
-        if (sep != string::npos) {
+        if (sep != string::npos) { // If separator found, split the string into customer name and feedback
             string customername = line.substr(0, sep);
             string feedback = line.substr(sep + 1);
 
@@ -629,11 +631,11 @@ void ViewCustomerFeedback() {
 void markbookingdone(Booking bookingList[], int bookingCount) {
     if (bookingCount == 0)
     {
-        cout << "No bookings available.\n";
+        cout << "No bookings available.\n";// exit if there are no bookings
         return;
     }
     cout << "===== Booking List =====\n";
-    for (int i = 0; i < bookingCount; i++)
+    for (int i = 0; i < bookingCount; i++) // Display all booking status
     {
         cout << i + 1 << ". "
             << bookingList[i].customerName << " | "
@@ -647,6 +649,7 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
     cout << "\nSelect the booking that needs to be marked (Enter 0 to cancel):\n";
     cin >> choice;
 
+    // input validation
     if (cin.fail())
     {
         cin.clear();
@@ -669,7 +672,7 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
         return;
     }
 
-    int index = choice - 1;
+    int index = choice - 1;// Map selection to match array index
 
     cout << "\nCurrent status: "
         << (bookingList[index].done ? "[DONE]" : "[PENDING]") << endl;
@@ -681,6 +684,7 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
     int statusChoice;
     cin >> statusChoice;
 
+    // update booking based on the choice
     if (cin.fail())
     {
         cin.clear();
@@ -705,7 +709,7 @@ void markbookingdone(Booking bookingList[], int bookingCount) {
         return;
     }
 
-    savebookingstofile(bookingList, bookingCount);
+    savebookingstofile(bookingList, bookingCount);// Save updated data to file
 }
 void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     char username[50];
@@ -747,7 +751,13 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
             password[i] = tolower(password[i]);
         }
 
-        expectedpw = string(username) + "123";
+        string lowerusername = username;
+        for (int i = 0; i < username[i]; i++)
+        {
+            lowerusername[i] = tolower(lowerusername[i]);
+        }
+
+        expectedpw = lowerusername + "123";
 
         if (password.empty()) {
             cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;
@@ -992,16 +1002,16 @@ void customerfeedback(const string& customername) {
         return;
     }
 
-    ofstream fbfile("feedback.txt", ios::app);
+    ofstream fbfile("feedback.txt", ios::app); // open file in append mode
     if (!fbfile) {
         cout << "[ERROR] Unable to open feedback file.";
         return;
     }
 
-    // Write on the same line
+    // save feedback in the format of: customer|feedback
     fbfile << customername << "|" << feedback << endl;
 
-    fbfile.close();
+    fbfile.close(); // close the file 
 
     cout << "\nThank you for your feedback, we appreciate your opinion.\n";
 }
@@ -1324,7 +1334,13 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             password[i] = tolower(password[i]);
         }
 
-        expectedpw = string(username) + "123";
+        string lowerusername = username;
+        for (int i = 0; i < username[i]; i++)
+        {
+            lowerusername[i] = tolower(lowerusername[i]);
+        }
+
+        expectedpw = lowerusername + "123";
 
         if (password.empty()) {
             cout << "\n[ERROR] Password cannot be empty! Please Try Again." << endl;

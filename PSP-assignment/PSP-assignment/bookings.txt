@@ -1,1 +1,2 @@
-OP|CHAN KUM LONG|Acrylic Nails|1|0|1|750|0
+OP|CHAN KUM LONG|Acrylic Nails|1|0|1|750|1
+JOHN|JOSHUA LOKE|Nail Art|1|0|1|600|1
