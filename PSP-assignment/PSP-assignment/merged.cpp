@@ -31,35 +31,6 @@ struct ExpertInfo {
     string slots[WEEKS][DAYS * SLOTS_PER_DAY] = { "FREE" }; // all slots default to "FREE"
 };
 
-// ================== FUNCTION PROTOTYPES ==================
-void clearInputBuffer();
-void customer(ExpertInfo experts[], int count, Booking bookingList[], int& bookingCount);
-void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
-void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
-void InitSchedules(ExpertInfo experts[], int count);
-void ShowExpertSchedule(ExpertInfo experts[], int count, int expertIndex);
-void ShowAllSchedules(ExpertInfo experts[], int count);
-void ShowExpertCustomers(Booking bookingList[], int count, const string& expertName);
-void ShowExpertBonus(string username, Booking bookingList[], int bookingCount);
-void markbookingdone_expert(Booking bookingList[], int bookingCount, const string& expertName);
-void Indi_schedule(ExpertInfo experts[], int count);
-void Schedule(ExpertInfo experts[], int count);
-void Customer_list(Booking bookingList[], int bookingCount);
-void Expert_bonus(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount);
-void ViewCustomerFeedback();
-void markbookingdone(Booking bookingList[], int bookingCount);
-const char* getDayName(Day day);
-void savebookingstofile(Booking bookingList[], int bookingCount);
-int loadbookingsfromfile(Booking bookingList[], int maxSize);
-void clearInputBuffer();
-void customerfeedback(const string& customername);
-int getValidatedInput(int min, int max, const string& prompt);
-bool processPayment(double amount, string service);
-string getExpertName(int serviceChoice);
-void addBooking(Booking bookingList[], int& bookingCount, const string& customerName, const string& expertName, const string& service,
-    int week, Day day, int slot, double amount);
-void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], int& bookingCount, const string& currentUser);
-
 // ================== GENERAL FUNCTIONS ==================
 void clearInputBuffer() {
     char c;
@@ -301,15 +272,15 @@ void ShowExpertBonus(string username, Booking bookingList[], int bookingCount) {
 }
 void markbookingdone_expert(Booking bookingList[], int bookingCount, const string& expertName) {
     if (bookingCount == 0) {
-        cout << "No bookings available.\n";
+        cout << "No bookings available.\n"; // return if there are no bookings
         return;
     }
 
     cout << "===== Your Customer Bookings =====\n";
-    int customerIndexes[MAX_BOOKINGS];
-    int count = 0;
+    int customerIndexes[MAX_BOOKINGS]; // store indexes of experts' bookings
+    int count = 0; //check how many bookings there are for the expert
 
-    for (int i = 0; i < bookingCount; i++) {
+    for (int i = 0; i < bookingCount; i++) { // filter and display only the bookings for this expert
         if (bookingList[i].expertName == expertName) {
             customerIndexes[count] = i; // store index of this expert’s booking
             cout << count + 1 << ". "
@@ -325,10 +296,10 @@ void markbookingdone_expert(Booking bookingList[], int bookingCount, const strin
         return;
     }
 
-    int choice;
+    int choice; 
     cout << "\nSelect the booking to update (Enter 0 to cancel): ";
     cin >> choice;
-
+    //input validation
     if (cin.fail()) {
         cin.clear();
         cin.ignore(1000, '\n');
@@ -344,8 +315,8 @@ void markbookingdone_expert(Booking bookingList[], int bookingCount, const strin
         return;
     }
 
-    int index = customerIndexes[choice - 1];
-    cout << "\nCurrent status: "
+    int index = customerIndexes[choice - 1]; // map selection to match array index
+    cout << "\nCurrent status: " // show current status and options
         << (bookingList[index].done ? "[DONE]" : "[PENDING]") << endl;
     cout << "Do you want to mark it as:\n";
     cout << "1. DONE\n";
@@ -355,12 +326,12 @@ void markbookingdone_expert(Booking bookingList[], int bookingCount, const strin
     int statusChoice;
     cin >> statusChoice;
 
-    if (statusChoice == 1) {
-        bookingList[index].done = true;
+    if (statusChoice == 1) { // update booking based on expert's choice
+        bookingList[index].done = true; // mark as DONE
         cout << "[OK] Booking marked as DONE.\n";
     }
     else if (statusChoice == 2) {
-        bookingList[index].done = false;
+        bookingList[index].done = false; // mark as PENDING
         cout << "[OK] Booking marked as PENDING.\n";
     }
     else {
@@ -368,7 +339,7 @@ void markbookingdone_expert(Booking bookingList[], int bookingCount, const strin
         return;
     }
 
-    savebookingstofile(bookingList, bookingCount);
+    savebookingstofile(bookingList, bookingCount); // save changes to file
 }
 void Expert(ExpertInfo experts[], int count, Booking bookingList[], int bookingCount) {
     string username, password;
@@ -977,6 +948,7 @@ void admin(ExpertInfo experts[], int count, Booking bookingList[], int bookingCo
             markbookingdone(bookingList, bookingCount);
             cout << "\nPress [ENTER] to return to Admin Menu.....\n";
             clearInputBuffer();
+            cin.get();
             system("CLS");
             break;
         case 8:
@@ -995,6 +967,12 @@ void customerfeedback(const string& customername) {
         << "We value your feedback, " << customername << "! Let us know if there are any improvements we can make.\n";
     cout << "Please enter your feedback about our service.(Enter 0 to cancel and return) \n";
     getline(cin, feedback);
+
+    if (feedback.empty())
+    {
+        cout << "Feedback cannot be Empty.";
+        return;
+    }
 
     if (feedback == "0")
     {
@@ -1263,7 +1241,8 @@ void showBookings(ExpertInfo experts[], int expertCount, Booking bookingList[], 
                                 bookingCount--;
 
                                 cout << "\n[OK] Booking Cancelled Successfully!" << endl;
-                                break;
+                                cin.get();
+                                return;
                             }
                         }
                         cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
@@ -1436,7 +1415,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             cout << "   - Acrylic Nail Art Add-ons\n";
 
             cout << "\nPress [ENTER] to return to Customer Menu.....";
-            clearInputBuffer();
+            cin.get();
             system("CLS");
             break;
         }
@@ -1588,6 +1567,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                             break;
                         case 'N':
                         case 'n':
+                            clearInputBuffer();
                             system("CLS");
                             break;
                         default:
@@ -1600,6 +1580,7 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
                 case 'N':
                 case 'n':
                     system("CLS");
+                    clearInputBuffer();
                     break;
                 default:
                     cout << "[ERROR] Invalid Selection! Please Enter (Y/y/N/n) Only." << endl;
@@ -1613,8 +1594,8 @@ void customer(ExpertInfo experts[], int count, Booking bookingList[], int& booki
             system("CLS");
             showBookings(experts, count, bookingList, bookingCount, string(username));
             cout << "\nPress [ENTER] to return to Customer Menu.....";
-            clearInputBuffer();
             cin.get();
+            clearInputBuffer();
             system("CLS");
             break;
         case 4:
